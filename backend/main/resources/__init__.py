@@ -1,0 +1,2 @@
+from .Calificacion import Calificacion as CalificacionResource
+from .Calificacion import Calificaciones as CalificacionesResource
