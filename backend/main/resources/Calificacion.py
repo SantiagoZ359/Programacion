@@ -14,9 +14,10 @@ class Calificacion(Resource):
         if int(id) in CALIFICACIONES:
             return CALIFICACIONES[int(id)]
         return '',404
-    def post(self,id):
+    def delete(self,id):
         if int(id) in CALIFICACIONES:
-            return CALIFICACIONES[int(id)]
+            del CALIFICACIONES[int(id)]
+            return '',204
         return '',404
 
 class Calificaciones(Resource):

@@ -12,5 +12,9 @@ def create_app():
 
     api.add_resource(resources.CalificacionesResource, '/calificaciones')
     api.add_resource(resources.CalificacionResource, '/calificacion/<id>')
+    api.add_resource(resources.PoemasResource, '/poemas')
+    api.add_resource(resources.PoemaResource, '/poema/<id>')
+    api.add_resource(resources.UsuariosResource, '/usuarios')
+    api.add_resource(resources.UsuariosResource, '/usuario/<id>')
     api.init_app(app)
     return app

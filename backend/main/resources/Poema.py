@@ -9,12 +9,22 @@ POEMAS = {
     2:{'nombrepoema': 'La nueva luna','autor':'Juancito1991'},
 }
 
-class Poema(resource):
+class Poema(Resource):
     def get(self,id):
         if int(id) in POEMAS:
             return POEMAS[int(id)]
         return '',404
-    def post(self,id):
+    def delete(self,id):
         if int(id) in POEMAS:
-            return POEMAS[int(id)]
-        return '',404
+            del POEMAS[int(id)]
+            return'',204
+        return'',404
+
+class Poemas(Resource):
+    def get (self):
+        return POEMAS
+    def post(self):
+        Poemas = request.get_json()
+        id = int(max(POEMAS.keys())) + 1
+        POEMAS[id] = Poema
+        return POEMAS[id], 201
