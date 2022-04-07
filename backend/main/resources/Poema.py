@@ -24,7 +24,7 @@ class Poemas(Resource):
     def get (self):
         return POEMAS
     def post(self):
-        Poemas = request.get_json()
+        Poema = request.get_json()
         id = int(max(POEMAS.keys())) + 1
         POEMAS[id] = Poema
         return POEMAS[id], 201

@@ -24,7 +24,7 @@ class Usuarios(Resource):
     def get (self):
         return USUARIOS
     def post(self):
-        Poemas = request.get_json()
+        Usuario = request.get_json()
         id = int(max(USUARIOS.keys())) + 1
         USUARIOS[id] = Usuario
         return USUARIOS[id], 201
