@@ -22,17 +22,23 @@ class Poema(db.Model):
     def to_json_short(self):
         poema_json = {
             'id': self.id,
-            'titulo': str(self.autor),
-
+            'titulo': str(self.titulo),
+            'autor_id': int(self.usuario_id),
+            'cuerpo':str(self.cuerpo),
+            'fecha':datetime(self.fecha)
         }
         return poema_json
     @staticmethod
     #Convertir JSON a objeto
     def from_json(poema_json):
         id = poema_json.get('id')
-        autor = poema_json.get('titulo')
-        titulo = poema_json.get('autor')
+        autor = poema_json.get('autor')
+        titulo = poema_json.get('titulo')
+        cuerpo = poema_json.get('cuerpo')
+        fecha = poema_json.get('fecha')
         return Poema(id=id,
                     titulo=titulo,
                     autor=autor,
+                    cuerpo=cuerpo,
+                    fecha=fecha,
                     )
