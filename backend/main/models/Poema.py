@@ -1,17 +1,21 @@
+from datetime import datetime
 from .. import db
 
 class Poema(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    titulo = db.Column(db.String(100), nullable=False)
-    autor = db.Column(db.String(100), nullable=False)
+    titulo = db.Column(db.String(50), nullable=False)
+    usuario_id = db.Column(db.Int(100), nullable=False)
+    cuerpo =db.Column(db.String(500), nullable=False)
+    fecha =db.Column(db.Datetime(), nullable=False)
     def __repr__(self):
-        return '<Poema: %r %r >' % (self.titulo, self.autor)
+        return '<Poema: %r %r %r %r >' % (self.titulo, self.usuario_id, self.cuerpo, self.fecha)
     def to_json(self):
         poema_json = {
             'id': self.id,
             'titulo': str(self.titulo),
-            'autor': str(self.autor),
-
+            'autor_id': int(self.usuario_id),
+            'cuerpo': str(self.cuerpo),
+            'fecha': datetime(self.fecha),
         }
         return poema_json
 
