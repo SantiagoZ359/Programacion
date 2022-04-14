@@ -1,4 +1,3 @@
-import email
 from .. import db
 
 class Usuario(db.Model):
@@ -9,7 +8,7 @@ class Usuario(db.Model):
     email= db.Column(db.String(50), nullable=False)
     
     def __repr__(self):
-        return '<Usuario: %r %r %r %r>'% (self.nombre, self.contraseña, self.rol, self.email)
+        return '<Usuario: %r %r %r %r >'% (self.nombre, self.contraseña, self.rol, self.email)
     def to_json(self):
         usuario_json = {
             'id': self.id,
