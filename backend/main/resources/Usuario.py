@@ -1,6 +1,7 @@
-import resource
 from flask_restful import Resource
-from flask import request
+from flask import request, jsonify
+from .. import db
+from main.models import UsuarioModel
 
 #Usuarios
 
@@ -11,20 +12,21 @@ USUARIOS = {
 
 class Usuario(Resource):
     def get(self,id):
-        if int(id) in USUARIOS:
-            return USUARIOS[int(id)]
-        return '',404
+        usuario = db.session.query(UsuarioModel).get_or_404(id)
+        return usuario.to_jason()
     def delete(self,id):
-        if int(id) in USUARIOS:
-            del USUARIOS[int(id)]
-            return'',204
-        return'',404
+        usuario = db.session.query(UsuarioModel).get_or_404(id)
+        db.session.delete(usuario)
+        db.session.commit()
+        return '',204
 
 class Usuarios(Resource):
     def get (self):
-        return USUARIOS
+        usuarios = db.session.query(UsuarioModel).all()
+        return jsonify ([UsuarioModel.to_json_short() for usuario in usuarios])
+
     def post(self):
-        Usuario = request.get_json()
-        id = int(max(USUARIOS.keys())) + 1
-        USUARIOS[id] = Usuario
-        return USUARIOS[id], 201
+        usuario = UsuarioModel.from_json(request.get_json())
+        db.session.add(usuario)
+        db.session.commit()
+        return usuario.to_json(), 201
