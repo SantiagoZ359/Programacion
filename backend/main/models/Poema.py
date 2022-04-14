@@ -8,7 +8,7 @@ class Poema(db.Model):
     cuerpo =db.Column(db.String(500), nullable=False)
     fecha =db.Column(db.Datetime(), nullable=False)
     def __repr__(self):
-        return '<Poema: %r %r %r %r >' % (self.titulo, self.usuario_id, self.cuerpo, self.fecha)
+        return '<Poema: %r %r %r %r  >' % (self.titulo, self.usuario_id, self.cuerpo, self.fecha)
     def to_json(self):
         poema_json = {
             'id': self.id,
