@@ -1,9 +1,7 @@
-import re
-import resource
 from flask_restful import Resource
 from flask import request, jsonify
-from .. import db
 from main.models import CalificacionModel
+from .. import db
 
 #Calificaciones
 

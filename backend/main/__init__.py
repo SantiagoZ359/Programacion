@@ -3,10 +3,9 @@ from flask import Flask
 from dotenv import load_dotenv
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
-import main.resources as resources
 
-db = SQLAlchemy()
 api = Api()
+db = SQLAlchemy()
 
 def create_app():
     app= Flask(__name__)
@@ -16,9 +15,9 @@ def create_app():
         os.mknod(os.getenv('DATABASE_PATH')+os.getenv('DATABASE_NAME'))
     
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_DATABASE_URL'] = 'sqlite:////'+os.getenv('DATABASE_PATH')+os.getenv('DATABASE_NAME')
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////'+os.getenv('DATABASE_PATH')+os.getenv('DATABASE_NAME')
     db.init_app(app)
-
+    import main.resources as resources
 
     api.add_resource(resources.CalificacionesResource, '/calificaciones')
     api.add_resource(resources.CalificacionResource, '/calificacion/<id>')

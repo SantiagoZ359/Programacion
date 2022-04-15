@@ -4,28 +4,28 @@ class Calificacion(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     nota= db.Column(db.String(50), nullable=False)
     comentario= db.Column(db.String(50), nullable=True)
-    usuario_id= db.Column(db.Interger(50), nullable=False) 
-    poema_id= db.Column(db.Interger(50), nullable=False)
+    usuario_id= db.Column(db.Integer, primary_key=True) 
+    poema_id= db.Column(db.Integer, primary_key=True)
     
     def __repr__(self):
         return '<Calificacion: %r %r %r %r >'% (self.nota, self.comentario, self.usuario_id, self.poema_id)
     def to_json(self):
         calificacion_json = {
             'id': self.id,
-            'nota': self.nota,
-            'comentario': self.comentario,
-            'usuario':self.usuario_id,
-            'poema':self.poema_id,
+            'nota': str(self.nota),
+            'comentario': str(self.comentario),
+            'usuario':str(self.usuario_id),
+            'poema':str(self.poema_id),
         }
         return calificacion_json
     
     def to_json_short(self):
         calificacion_json = {
             'id': self.id,
-            'nota': self.nota,
-            'comentario': self.comentario,
-            'usuario': self.usuario_id,
-            'poema':self.poema_id,
+            'nota': str(self.nota),
+            'comentario': str(self.comentario),
+            'usuario': str(self.usuario_id),
+            'poema':str(self.poema_id),
         }
         return calificacion_json
     @staticmethod

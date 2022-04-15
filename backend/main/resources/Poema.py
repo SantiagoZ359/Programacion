@@ -1,6 +1,7 @@
-import resource
 from flask_restful import Resource
-from flask import request
+from flask import request, jsonify
+from main.models import PoemaModel
+from .. import db
 
 #Poemas
 
@@ -11,20 +12,21 @@ POEMAS = {
 
 class Poema(Resource):
     def get(self,id):
-        if int(id) in POEMAS:
-            return POEMAS[int(id)]
-        return '',404
+        poema = db.session.query(PoemaModel).get_or_404(id)
+        return poema.to_jason()
     def delete(self,id):
-        if int(id) in POEMAS:
-            del POEMAS[int(id)]
-            return'',204
-        return'',404
+        poema = db.session.query(PoemaModel).get_or_404(id)
+        db.session.delete(poema)
+        db.session.commit()
+        return '',204
 
 class Poemas(Resource):
     def get (self):
-        return POEMAS
+        poemas = db.session.query(PoemaModel).all()
+        return jsonify ([PoemaModel.to_json_short() for poema in poemas])
+
     def post(self):
-        Poema = request.get_json()
-        id = int(max(POEMAS.keys())) + 1
-        POEMAS[id] = Poema
-        return POEMAS[id], 201
+        poema = PoemaModel.from_json(request.get_json())
+        db.session.add(poema)
+        db.session.commit()
+        return poema.to_json(), 201

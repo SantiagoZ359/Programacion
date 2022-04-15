@@ -1,12 +1,14 @@
 from datetime import datetime
 from .. import db
 
+current_date = datetime.today().strftime('%A, %B %D, %Y %H:%M:%S')
+
 class Poema(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(50), nullable=False)
-    usuario_id = db.Column(db.Integer(100), nullable=False)
+    usuario_id = db.Column(db.Integer, nullable=False)
     cuerpo =db.Column(db.String(500), nullable=False)
-    fecha =db.Column(db.Datetime(), nullable=False)
+    fecha =db.Column(db.Integer(current_date), nullable=False)
     def __repr__(self):
         return '<Poema: %r %r %r %r >' % (self.titulo, self.usuario_id, self.cuerpo, self.fecha)
     def to_json(self):
@@ -15,7 +17,7 @@ class Poema(db.Model):
             'titulo': str(self.titulo),
             'autor_id': int(self.usuario_id),
             'cuerpo': str(self.cuerpo),
-            'fecha': datetime(self.fecha),
+            'fecha': int(self.fecha),
         }
         return poema_json
 
@@ -25,7 +27,7 @@ class Poema(db.Model):
             'titulo': str(self.titulo),
             'autor_id': int(self.usuario_id),
             'cuerpo':str(self.cuerpo),
-            'fecha':datetime(self.fecha)
+            'fecha':int(self.fecha)
         }
         return poema_json
     @staticmethod
