@@ -1,4 +1,5 @@
 from datetime import datetime
+from sqlite3 import Timestamp
 from sqlalchemy import PrimaryKeyConstraint, true
 from .. import db
 
@@ -7,16 +8,16 @@ class Poema(db.Model):
     titulo = db.Column(db.String(50), nullable=False)
     usuario_id = db.Column(db.Integer, primary_key=True)
     cuerpo =db.Column(db.String(500), nullable=False)
-    fecha =db.Column(db.Integer, primary_key=True)
+    fecha =db.Column(default=Timestamp.now, nullable=False)
     def __repr__(self):
         return '<Poema: %r %r %r %r >' % (self.titulo, self.usuario_id, self.cuerpo, self.fecha)
     def to_json(self):
         poema_json = {
             'id': self.id,
             'titulo': str(self.titulo),
-            'usuario_id': self.usuario_id,
+            'usuario_id': (self.usuario_id),
             'cuerpo': str(self.cuerpo),
-            'fecha': self.fecha,
+            'fecha': str(self.fecha),
         }
         return poema_json
 
@@ -24,9 +25,9 @@ class Poema(db.Model):
         poema_json = {
             'id': self.id,
             'titulo': str(self.titulo),
-            'usuario_id': self.usuario_id,
+            'usuario_id': (self.usuario_id),
             'cuerpo':str(self.cuerpo),
-            'fecha':self.fecha
+            'fecha':str(self.fecha),
         }
         return poema_json
     @staticmethod

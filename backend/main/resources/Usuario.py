@@ -21,9 +21,9 @@ class Usuario(Resource):
         return '',204
 
 class Usuarios(Resource):
-    def get (self):
+    def get(self):
         usuarios = db.session.query(UsuarioModel).all()
-        return jsonify ([UsuarioModel.to_json_short() for usuario in usuarios])
+        return jsonify([UsuarioModel.to_json_short(self) for usuario in usuarios])
 
     def post(self):
         usuario = UsuarioModel.from_json(request.get_json())
