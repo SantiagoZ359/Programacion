@@ -1,11 +1,14 @@
+from sqlalchemy import ForeignKey
 from .. import db
 
 class Calificacion(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     nota= db.Column(db.Integer(),nullable=False)
     comentario= db.Column(db.String(50), nullable=True)
-    usuario_id= db.Column(db.Integer()) 
-    poema_id= db.Column(db.Integer())
+    usuario_id= db.Column(db.Integer,db.ForeignKey('usuario.id'),nullable=False)
+    usuario = db.relationship('Usuario',back_populates="calificaciones",uselist=False,single_parent=True) 
+    poema_id= db.Column(db.Integer,db.ForeignKey('poema.id'),nullable=False)
+    poema = db.relationship('Poema',back_populates="calificaciones",uselist=False,single_parent = True)
     
     def __repr__(self):
         return '<Calificacion: %r %r >'% (self.nota, self.comentario, self.usuario_id, self.poema_id)
@@ -14,8 +17,8 @@ class Calificacion(db.Model):
             'id': self.id,
             'nota': str(self.nota),
             'comentario': str(self.comentario),
-            'usuario_id':int(self.usuario_id),
-            'poema_id':int(self.poema_id),
+            'usuario':(self.usuario.to_json()),
+            'poema':(self.poema.to_json()),
         }
         return calificacion_json
     

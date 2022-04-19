@@ -1,22 +1,23 @@
-from email.policy import default
-from sqlite3 import Timestamp
+from datetime import datetime
 from .. import db
 
 class Poema(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(500), nullable=False)
-    usuario_id = db.Column(db.Integer())
+    usuario_id = db.Column(db.Integer,db.ForeignKey('usuario.id'), nullable=False)
+    usuario = db.relationship('Usuario',back_populates="poemas", uselist=False,single_parent=True)
     cuerpo =db.Column(db.String(500), nullable=False)
-    fecha =db.Column(default=Timestamp.now(), nullable=False)
+    fecha =db.Column(db.DateTime, nullable=False, default=datetime.now())
+    calificaciones = db.relationship('Calificacion',back_populates="poema",cascade='all, delete-orphan')
     def __repr__(self):
         return '<Poema: %r %r >' % (self.titulo, self.usuario_id, self.cuerpo, self.fecha)
     def to_json(self):
         poema_json = {
             'id': self.id,
             'titulo': str(self.titulo),
-            'usuario_id': int(self.usuario_id),
             'cuerpo': str(self.cuerpo),
-            'fecha': str(self.fecha),
+            'fecha': str(self.fecha.strftime("%d-%m-%Y")),
+            'usuario': self.usuario.to_json(),
         }
         return poema_json
 
