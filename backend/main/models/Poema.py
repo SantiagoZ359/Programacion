@@ -4,11 +4,15 @@ from .. import db
 class Poema(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(500), nullable=False)
+    #relacion usuario
     usuario_id = db.Column(db.Integer,db.ForeignKey('usuario.id'), nullable=False)
     usuario = db.relationship('Usuario',back_populates="poemas", uselist=False,single_parent=True)
+    
     cuerpo =db.Column(db.String(500), nullable=False)
     fecha =db.Column(db.DateTime, nullable=False, default=datetime.now())
+    #relacion calificacion
     calificaciones = db.relationship('Calificacion',back_populates="poema",cascade='all, delete-orphan')
+    
     def __repr__(self):
         return '<Poema: %r %r >' % (self.titulo, self.usuario_id, self.cuerpo, self.fecha)
     def to_json(self):
