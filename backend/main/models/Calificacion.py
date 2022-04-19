@@ -14,8 +14,8 @@ class Calificacion(db.Model):
             'id': self.id,
             'nota': str(self.nota),
             'comentario': str(self.comentario),
-            'usuario':str(self.usuario_id),
-            'poema':str(self.poema_id),
+            'usuario':int(self.usuario_id),
+            'poema':int(self.poema_id),
         }
         return calificacion_json
     
@@ -24,8 +24,8 @@ class Calificacion(db.Model):
             'id': self.id,
             'nota': str(self.nota),
             'comentario': str(self.comentario),
-            'usuario': str(self.usuario_id),
-            'poema':str(self.poema_id),
+            'usuario': int(self.usuario_id),
+            'poema':int(self.poema_id),
         }
         return calificacion_json
     @staticmethod

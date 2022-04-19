@@ -5,10 +5,10 @@ from .. import db
 
 #Calificaciones
 
-CALIFICACIONES = {
-    1:{'calificacion': '8','Autor':'Lun891'},
-    2:{'calificacion': '10','Autor':'Juancito1991'},
-}
+#CALIFICACIONES = {
+#    1:{'calificacion': '8','Autor':'Lun891'},
+#    2:{'calificacion': '10','Autor':'Juancito1991'},
+#}
 
 class Calificacion(Resource):
     def get(self,id):

@@ -12,20 +12,19 @@ class Usuario(db.Model):
     def to_json(self):
         usuario_json = {
             'id': self.id,
-            'nombre': self.nombre,
-            'contraseña': self.contraseña,
-            'rol':self.rol,
-            'email':self.email,
+            'nombre': str(self.nombre),
+            'contraseña': str(self.contraseña),
+            'rol':str(self.rol),
+            'email':str(self.email),
         }
         return usuario_json
     
     def to_json_short(self):
         usuario_json = {
             'id': self.id,
-            'nombre': self.nombre,
-            'contraseña': self.contraseña,
-            'rol': self.rol,
-            'email':self.email,
+            'nombre': str(self.nombre),
+            'contraseña': str(self.contraseña),
+            'email':str(self.email),
         }
         return usuario_json
     @staticmethod
