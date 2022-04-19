@@ -1,3 +1,4 @@
+from email.policy import default
 from sqlite3 import Timestamp
 from .. import db
 
@@ -6,7 +7,7 @@ class Poema(db.Model):
     titulo = db.Column(db.String(500), nullable=False)
     usuario_id = db.Column(db.Integer())
     cuerpo =db.Column(db.String(500), nullable=False)
-    fecha =db.Column(default=Timestamp.now(), nullable=False)
+    fecha =db.Column(default=Timestamp.now, nullable=False)
     def __repr__(self):
         return '<Poema: %r %r >' % (self.titulo, self.usuario_id, self.cuerpo, self.fecha)
     def to_json(self):

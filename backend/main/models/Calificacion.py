@@ -4,8 +4,8 @@ class Calificacion(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     nota= db.Column(db.String(50), nullable=False)
     comentario= db.Column(db.String(50), nullable=True)
-    usuario_id= db.Column(db.Integer, primary_key=True) 
-    poema_id= db.Column(db.Integer, primary_key=True)
+    usuario_id= db.Column(db.Integer()) 
+    poema_id= db.Column(db.Integer())
     
     def __repr__(self):
         return '<Calificacion: %r %r >'% (self.nota, self.comentario, self.usuario_id, self.poema_id)
@@ -14,7 +14,7 @@ class Calificacion(db.Model):
             'id': self.id,
             'nota': str(self.nota),
             'comentario': str(self.comentario),
-            'usuario':int(self.usuario_id),
+            'usuario_id':int(self.usuario_id),
             'poema':int(self.poema_id),
         }
         return calificacion_json
@@ -24,7 +24,7 @@ class Calificacion(db.Model):
             'id': self.id,
             'nota': str(self.nota),
             'comentario': str(self.comentario),
-            'usuario': int(self.usuario_id),
+            'usuario_id': int(self.usuario_id),
             'poema':int(self.poema_id),
         }
         return calificacion_json
@@ -33,11 +33,11 @@ class Calificacion(db.Model):
         id = calificacion_json.get('id')
         nota = calificacion_json.get('nota')
         comentario = calificacion_json.get('comentario')
-        usuario = calificacion_json.get('usuario')
+        usuario_id = calificacion_json.get('usuario_id')
         poema = calificacion_json.get('poema')
         return Calificacion(id = id,
                         nota=nota,
                         comentario=comentario,
-                        usuario = usuario,
+                        usuario = usuario_id,
                         poema= poema,
                         )
