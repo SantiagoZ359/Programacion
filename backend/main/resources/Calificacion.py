@@ -13,7 +13,7 @@ CALIFICACIONES = {
 class Calificacion(Resource):
     def get(self,id):
         calificacion = db.session.query(CalificacionModel).get_or_404(id)
-        return calificacion.to_jason()
+        return calificacion.to_json()
     def delete(self,id):
         calificacion = db.session.query(CalificacionModel).get_or_404(id)
         db.session.delete(calificacion)

@@ -8,7 +8,7 @@ class Calificacion(db.Model):
     poema_id= db.Column(db.Integer, primary_key=True)
     
     def __repr__(self):
-        return '<Calificacion: %r %r %r %r >'% (self.nota, self.comentario, self.usuario_id, self.poema_id)
+        return '<Calificacion: %r %r >'% (self.nota, self.comentario, self.usuario_id, self.poema_id)
     def to_json(self):
         calificacion_json = {
             'id': self.id,

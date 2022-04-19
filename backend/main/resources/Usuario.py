@@ -5,15 +5,15 @@ from .. import db
 
 #Usuarios
 
-USUARIOS = {
-    1:{'nombre-usuario': 'Carlos','nickname-usuario':'Lun891'},
-    2:{'nombre-usuario': 'Juan','nickusuario':'Juancito1991'},
-}
+#USUARIOS = {
+#    1:{'nombre-usuario': 'Carlos','nickname-usuario':'Lun891'},
+#    2:{'nombre-usuario': 'Juan','nickusuario':'Juancito1991'},
+#}
 
 class Usuario(Resource):
     def get(self,id):
         usuario = db.session.query(UsuarioModel).get_or_404(id)
-        return usuario.to_jason()
+        return usuario.to_json()
     def delete(self,id):
         usuario = db.session.query(UsuarioModel).get_or_404(id)
         db.session.delete(usuario)

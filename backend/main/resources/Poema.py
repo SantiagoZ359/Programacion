@@ -5,15 +5,15 @@ from .. import db
 
 #Poemas
 
-POEMAS = {
-    1:{'nombrepoema': 'Rafaga','Autor':'Lun891'},
-    2:{'nombrepoema': 'La nueva luna','autor':'Juancito1991'},
-}
+#POEMAS = {
+#    1:{'nombrepoema': 'Rafaga','Autor':'Lun891'},
+#    2:{'nombrepoema': 'La nueva luna','autor':'Juancito1991'},
+#}
 
 class Poema(Resource):
     def get(self,id):
         poema = db.session.query(PoemaModel).get_or_404(id)
-        return poema.to_jason()
+        return poema.to_json()
     def delete(self,id):
         poema = db.session.query(PoemaModel).get_or_404(id)
         db.session.delete(poema)
