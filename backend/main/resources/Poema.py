@@ -23,7 +23,7 @@ class Poema(Resource):
 class Poemas(Resource):
     def get (self):
         poemas = db.session.query(PoemaModel).all()
-        return jsonify ([PoemaModel.to_json_short() for poema in poemas])
+        return jsonify ([poema.to_json_short() for poema in poemas])
 
     def post(self):
         poema = PoemaModel.from_json(request.get_json())

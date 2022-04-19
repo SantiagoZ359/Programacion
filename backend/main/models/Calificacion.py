@@ -35,6 +35,6 @@ class Calificacion(db.Model):
         return Calificacion(id = id,
                         nota=nota,
                         comentario=comentario,
-                        usuario = usuario_id,
+                        usuario_id = usuario_id,
                         poema_id= poema_id,
                         )
