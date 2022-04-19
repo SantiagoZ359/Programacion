@@ -2,7 +2,7 @@ from .. import db
 
 class Calificacion(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    nota= db.Column(db.String(50), nullable=False)
+    nota= db.Column(db.Integer(),nullable=False)
     comentario= db.Column(db.String(50), nullable=True)
     usuario_id= db.Column(db.Integer()) 
     poema_id= db.Column(db.Integer())
@@ -15,7 +15,7 @@ class Calificacion(db.Model):
             'nota': str(self.nota),
             'comentario': str(self.comentario),
             'usuario_id':int(self.usuario_id),
-            'poema':int(self.poema_id),
+            'poema_id':int(self.poema_id),
         }
         return calificacion_json
     
@@ -23,9 +23,6 @@ class Calificacion(db.Model):
         calificacion_json = {
             'id': self.id,
             'nota': str(self.nota),
-            'comentario': str(self.comentario),
-            'usuario_id': int(self.usuario_id),
-            'poema':int(self.poema_id),
         }
         return calificacion_json
     @staticmethod
@@ -34,10 +31,10 @@ class Calificacion(db.Model):
         nota = calificacion_json.get('nota')
         comentario = calificacion_json.get('comentario')
         usuario_id = calificacion_json.get('usuario_id')
-        poema = calificacion_json.get('poema')
+        poema_id = calificacion_json.get('poema_id')
         return Calificacion(id = id,
                         nota=nota,
                         comentario=comentario,
                         usuario = usuario_id,
-                        poema= poema,
+                        poema_id= poema_id,
                         )

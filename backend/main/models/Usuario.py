@@ -23,8 +23,6 @@ class Usuario(db.Model):
         usuario_json = {
             'id': self.id,
             'nombre': str(self.nombre),
-            'contraseña': str(self.contraseña),
-            'email':str(self.email),
         }
         return usuario_json
     @staticmethod
