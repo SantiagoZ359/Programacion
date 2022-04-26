@@ -36,7 +36,8 @@ class Poemas(Resource):
                 if key == "por_pagina":
                     por_pagina = int(valor)
         poemas = poemas.paginamiento(pagina,por_pagina, True, 10)
-        return jsonify ([poema.to_json_short() for poema in poemas])
+        return jsonify ({"poemas":[poema.to_json_short() for poema in poemas.items()],
+        "total": poemas.total, "paginas": poemas.paginas, "pagina": pagina})
 
     def post(self):
         poema = PoemaModel.from_json(request.get_json())
