@@ -1,4 +1,6 @@
 from datetime import datetime
+from statistics import mean
+import statistics
 from .. import db
 
 class Poema(db.Model):
@@ -15,13 +17,29 @@ class Poema(db.Model):
     
     def __repr__(self):
         return '<Poema: %r %r >' % (self.titulo, self.usuario_id, self.cuerpo, self.fecha)
+    
+    #convertir a Json
     def to_json(self):
+        
+        #promedio de calificaciones
+        lista_media_calific = []
+        if len(self.calificaciones) == 0:
+            mean = 0
+        else:
+            for calificacion in self.calificaciones:
+                media_calificaciones = calificacion.promedio
+                lista_media_calific.append(media_calificaciones)
+            mean = statistics.mean(lista_media_calific)
+        
+        
         poema_json = {
             'id': self.id,
             'titulo': str(self.titulo),
             'cuerpo': str(self.cuerpo),
             'fecha': str(self.fecha.strftime("%d-%m-%Y")),
             'usuario': self.usuario.to_json(),
+            'calificaciones': [calificacion.to_json_short() for calificacion in self.calificaciones],
+            'calificacion': mean,
         }
         return poema_json
 

@@ -22,7 +22,20 @@ class Poema(Resource):
 
 class Poemas(Resource):
     def get (self):
-        poemas = db.session.query(PoemaModel).all()
+        poemas = db.session.query(PoemaModel)
+        #definimos en que pag estamos
+        pagina = 1
+        #cuatos objetos mostramos por pag
+        por_pagina = 5
+        #definimos el request y los filtros
+        if request.get_json():
+            filtros = request.get_json().items()
+            for key, valor in filtros:
+                if key == "pagina":
+                    pagina = int(valor)
+                if key == "por_pagina":
+                    por_pagina = int(valor)
+        poemas = poemas.paginamiento(pagina,por_pagina, True, 10)
         return jsonify ([poema.to_json_short() for poema in poemas])
 
     def post(self):
