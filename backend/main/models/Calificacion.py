@@ -5,9 +5,11 @@ class Calificacion(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     nota= db.Column(db.Integer(),nullable=False)
     comentario= db.Column(db.String(50), nullable=True)
+    
     #relacion usuario
     usuario_id= db.Column(db.Integer,db.ForeignKey('usuario.id'),nullable=False)
     usuario = db.relationship('Usuario',back_populates="calificaciones",uselist=False,single_parent=True) 
+    
     #relacion poema
     poema_id= db.Column(db.Integer,db.ForeignKey('poema.id'),nullable=False)
     poema = db.relationship('Poema',back_populates="calificaciones",uselist=False,single_parent = True)
@@ -28,6 +30,7 @@ class Calificacion(db.Model):
         calificacion_json = {
             'id': self.id,
             'nota': str(self.nota),
+            'usuario': self.usuario.to_json_short(),
         }
         return calificacion_json
     @staticmethod

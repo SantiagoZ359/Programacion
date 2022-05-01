@@ -6,32 +6,33 @@ from .. import db
 class Poema(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(500), nullable=False)
+    cuerpo =db.Column(db.String(500), nullable=False)
+    fecha =db.Column(db.DateTime, nullable=False, default=datetime.now())
+
     #relacion usuario
     usuario_id = db.Column(db.Integer,db.ForeignKey('usuario.id'), nullable=False)
     usuario = db.relationship('Usuario',back_populates="poemas", uselist=False,single_parent=True)
     
-    cuerpo =db.Column(db.String(500), nullable=False)
-    fecha =db.Column(db.DateTime, nullable=False, default=datetime.now())
     #relacion calificacion
     calificaciones = db.relationship('Calificacion',back_populates="poema",cascade='all, delete-orphan')
     
     def __repr__(self):
         return '<Poema: %r %r >' % (self.titulo, self.usuario_id, self.cuerpo, self.fecha)
     
-    #convertir a Json
-    def to_json(self):
-        
-        #promedio de calificaciones
+
+    #promedio de calificaciones
+    def prom_calif(self):
         lista_media_calific = []
         if len(self.calificaciones) == 0:
-            mean = 0
+            prom = 0
         else:
             for calificacion in self.calificaciones:
                 media_calificaciones = calificacion.promedio
                 lista_media_calific.append(media_calificaciones)
-            mean = statistics.mean(lista_media_calific)
-        
-        
+            prom = statistics.mean(lista_media_calific)
+        return prom
+
+    def to_json(self):   
         poema_json = {
             'id': self.id,
             'titulo': str(self.titulo),
@@ -39,7 +40,7 @@ class Poema(db.Model):
             'fecha': str(self.fecha.strftime("%d-%m-%Y")),
             'usuario': self.usuario.to_json(),
             'calificaciones': [calificacion.to_json_short() for calificacion in self.calificaciones],
-            'calificacion': mean,
+            'promedio': self.prom_calif(),
         }
         return poema_json
 
@@ -47,9 +48,14 @@ class Poema(db.Model):
         poema_json = {
             'id': self.id,
             'titulo': str(self.titulo),
+            'fecha': str(self.fecha.strftime("%d-%m-%Y")),
+            'usuario': self.usuario.to_json_short(),
+            'promedio': self.prom_calif(),
         }
         return poema_json
+    
     @staticmethod
+    
     #Convertir JSON a objeto
     def from_json(poema_json):
         id = poema_json.get('id')

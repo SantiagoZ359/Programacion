@@ -6,6 +6,7 @@ class Usuario(db.Model):
     contraseña= db.Column(db.String(50), nullable=False)
     rol= db.Column(db.String(50), nullable=False) 
     email= db.Column(db.String(50), nullable=False)
+    
     #relacion base
     poemas = db.relationship("Poema", back_populates="usuario",cascade="all, delete-orphan")
     calificaciones = db.relationship("Calificacion", back_populates="usuario",cascade="all, delete-orphan")
@@ -16,11 +17,15 @@ class Usuario(db.Model):
         usuario_json = {
             'id': self.id,
             'nombre': str(self.nombre),
-            'contraseña': str(self.contraseña),
-            'rol':str(self.rol),
-            'email':str(self.email),
+            #'contraseña': str(self.contraseña),
+            #'rol':str(self.rol),
+            #'email':str(self.email),
+            'poemas':[poema.to_json_short() for poema in self.poemas],
+            'num_poemas':len(self.poemas),
+            'num_calificaciones':len(self.calificaciones),
         }
         return usuario_json
+    
     def to_json_complete(self):
         usuario_json = {
             'id': self.id,
@@ -29,7 +34,8 @@ class Usuario(db.Model):
             'rol': str(self.rol),
             'email': str(self.email),
             'calificaciones': [calificacion.to_json() for calificacion in self.calificaciones], 
-            'poemas' : [poema.to_json() for poema in self.poemas]
+            'poemas' : [poema.to_json() for poema in self.poemas],
+
 
         }
     def to_json_short(self):
@@ -38,7 +44,9 @@ class Usuario(db.Model):
             'nombre': str(self.nombre),
         }
         return usuario_json
+    
     @staticmethod
+    
     def from_json(usuario_json):
         id = usuario_json.get('id')
         nombre = usuario_json.get('nombre')
