@@ -22,14 +22,14 @@ class Poema(db.Model):
 
     #promedio de calificaciones
     def prom_calif(self):
-        lista_media_calific = []
+        nota_list = []
         if len(self.calificaciones) == 0:
             prom = 0
         else:
             for calificacion in self.calificaciones:
-                media_calificaciones = calificacion.promedio
-                lista_media_calific.append(media_calificaciones)
-            prom = statistics.mean(lista_media_calific)
+                nota = calificacion.nota
+                nota_list.append(nota)
+            prom = statistics.mean(nota_list)
         return prom
 
     def to_json(self):   

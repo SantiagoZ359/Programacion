@@ -1,6 +1,8 @@
 from flask_restful import Resource
 from flask import request, jsonify
-from main.models import UsuarioModel, CalificacionModel, PoemaModel
+from main.models import UsuarioModel
+from main.models import CalificacionModel
+from main.models import PoemaModel
 from .. import db
 from sqlalchemy import func
 

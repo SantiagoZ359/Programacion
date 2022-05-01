@@ -38,6 +38,8 @@ class Usuario(db.Model):
 
 
         }
+        return usuario_json
+    
     def to_json_short(self):
         usuario_json = {
             'id': self.id,
