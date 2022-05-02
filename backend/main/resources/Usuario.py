@@ -14,14 +14,17 @@ from sqlalchemy import func
 #}
 
 class Usuario(Resource):
+    #metodo get
     def get(self,id):
         usuario = db.session.query(UsuarioModel).get_or_404(id)
         return usuario.to_json()
+    #metodo delete
     def delete(self,id):
         usuario = db.session.query(UsuarioModel).get_or_404(id)
         db.session.delete(usuario)
         db.session.commit()
         return '',204
+    #metodo put
     def put(self,id):
         usuario = db.session.query(UsuarioModel).get_or_404(id)
         data = request.get_json().items()
