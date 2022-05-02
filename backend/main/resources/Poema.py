@@ -13,14 +13,17 @@ from .. import db
 #}
 
 class Poema(Resource):
+    #metodo get
     def get(self,id):
         poema = db.session.query(PoemaModel).get_or_404(id)
         return poema.to_json()
+    #metodo delete
     def delete(self,id):
         poema = db.session.query(PoemaModel).get_or_404(id)
         db.session.delete(poema)
         db.session.commit()
         return '',204
+    #metodo put
     def put(self,id):
         poema = db.session.query(PoemaModel).get_or_404(id)
         data = request.get_json().items()
