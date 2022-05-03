@@ -1,16 +1,36 @@
+from email.policy import default
 from .. import db
+from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     nombre= db.Column(db.String(50), nullable=False)
+    #Contraseña que sera el hash de la pass en txt plano
     contraseña= db.Column(db.String(50), nullable=False)
-    rol= db.Column(db.String(50), nullable=False) 
-    email= db.Column(db.String(50), nullable=False)
+    #rol user o admin
+    rol= db.Column(db.String(50), nullable=False, default = "usuario") 
+    #Mail como nombre de usuario
+    email= db.Column(db.String(50), unique=True, index=True, nullable=False)
     
     #relacion base
     poemas = db.relationship("Poema", back_populates="usuario",cascade="all, delete-orphan")
     calificaciones = db.relationship("Calificacion", back_populates="usuario",cascade="all, delete-orphan")
     
+    #Getter de la contraseña plana no permite leerla
+    @property
+    def plain_password(self):
+        raise AttributeError('Contraseña no leible')
+    #Setter de la contraseña plana no permite leerla
+    #Calcula el hash y lo guarda en el atributo password
+    @plain_password.setter
+    def plain_password(self, contraseña):
+        self.contraseña = generate_password_hash(contraseña)
+    #Metodo que compara una contraseña en texto plano con el hash guardado en la db
+    def validate_pass(self, contraseña):
+        return check_password_hash(self.contraseña, contraseña)
+
+
     def __repr__(self):
         return '<Usuario: %r %r >'% (self.nombre, self.contraseña, self.rol, self.email)
     def to_json(self):
@@ -48,7 +68,6 @@ class Usuario(db.Model):
         return usuario_json
     
     @staticmethod
-    
     def from_json(usuario_json):
         id = usuario_json.get('id')
         nombre = usuario_json.get('nombre')
@@ -57,7 +76,7 @@ class Usuario(db.Model):
         email = usuario_json.get('email')
         return Usuario(id = id,
                         nombre=nombre,
-                        contraseña=contraseña,
+                        plain_password = contraseña,
                         rol=rol,
                         email=email,
                         )

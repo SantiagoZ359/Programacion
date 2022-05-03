@@ -5,6 +5,7 @@ from main.models import CalificacionModel
 from main.models import PoemaModel
 from .. import db
 from sqlalchemy import func
+from main.auth.decorators import admin_required
 
 #Usuarios
 
@@ -19,6 +20,7 @@ class Usuario(Resource):
         usuario = db.session.query(UsuarioModel).get_or_404(id)
         return usuario.to_json()
     #metodo delete
+    @admin_required
     def delete(self,id):
         usuario = db.session.query(UsuarioModel).get_or_404(id)
         db.session.delete(usuario)

@@ -22,6 +22,7 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////'+os.getenv('DATABASE_PATH')+os.getenv('DATABASE_NAME')
     db.init_app(app)
+    
     import main.resources as resources
 
     api.add_resource(resources.CalificacionesResource, '/calificaciones')
@@ -31,4 +32,15 @@ def create_app():
     api.add_resource(resources.UsuariosResource, '/usuarios')
     api.add_resource(resources.UsuarioResource, '/usuario/<id>')
     api.init_app(app)
+    
+    #Cargar clave secreta
+    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+    #Cargar tiempo de expiracion de los tokens
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES'))
+    jwt.init_app(app)
+
+    from main.auth import routes
+    #Importar blueprint
+    app.register_blueprint(auth.routes.auth)
+
     return app
