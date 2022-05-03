@@ -3,9 +3,14 @@ from flask import Flask
 from dotenv import load_dotenv
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager
 
+#Inicializa API de Flask Restful
 api = Api()
+#Inicializamos SQLAlchemy
 db = SQLAlchemy()
+#Inicializamos JWT
+jwt = JWTManager()
 
 def create_app():
     app= Flask(__name__)

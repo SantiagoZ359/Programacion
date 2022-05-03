@@ -4,6 +4,7 @@ lib64
 share/python-wheels
 lib/python3.9/site-packages
 backend/lib/python3.9/site-packages
+site-packages
 lib
 pyvenv.cfg
 bin
