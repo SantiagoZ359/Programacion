@@ -54,6 +54,13 @@ class Poema(db.Model):
         }
         return poema_json
     
+    def to_json_public(self):
+        poema_json = {
+            'id': self.id,
+            'titulo': str(self.titulo),
+            'fecha': str(self.fecha.strftime("%d-%m-%Y"))
+        }
+    
     @staticmethod
     
     #Convertir JSON a objeto

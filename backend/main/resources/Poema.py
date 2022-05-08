@@ -4,6 +4,7 @@ from flask import request, jsonify
 from main.models import PoemaModel, UsuarioModel
 from sqlalchemy import func
 from .. import db
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 #Poemas
 
@@ -88,12 +89,20 @@ class Poemas(Resource):
                         poemas == poemas.order_by(PoemaModel.usuario.desc())
 
         poemas = poemas.paginamiento(pagina,por_pagina, True, 10)
-        return jsonify ({"poemas":[poema.to_json_short() for poema in poemas.items()],
+        return jsonify ({"poemas":[poema.to_json_public() for poema in poemas()],
         "total": poemas.total, "paginas": poemas.paginas, "pagina": pagina})
 
+    @jwt_required()
     def post(self):
         poema = PoemaModel.from_json(request.get_json())
-        db.session.query(PoemaModel).get_or_404(poema.usuario_id)
-        db.session.add(poema)
-        db.session.commit()
+        #se obtiene el id del usuario autenticado
+        current_user = get_jwt_identity()
+        #se asocia el poema con el usuario
+        poema.usuario_id = current_user
+        
+        try:
+            db.session.add(poema)
+            db.session.commit()
+        except Exception as error:
+            return 'Formato incorrecto', 400
         return poema.to_json(), 201
