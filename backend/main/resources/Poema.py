@@ -1,10 +1,15 @@
 from datetime import *
 from flask_restful import Resource
+from itertools import count
+from locale import currency
 from flask import request, jsonify
-from main.models import PoemaModel, UsuarioModel
+from main.models import PoemaModel, UsuarioModel, CalificacionModel
 from sqlalchemy import func
 from .. import db
+import jwt
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from main.auth.decorators import admin_required
+from flask_jwt_extended import verify_jwt_in_request, get_jwt
 
 #Poemas
 
@@ -15,9 +20,18 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 class Poema(Resource):
     #metodo get
+    @jwt_required(optional=True)
     def get(self,id):
         poema = db.session.query(PoemaModel).get_or_404(id)
         return poema.to_json()
+        identidad = get_jwt_identity()
+        if identidad:
+            return poema.to_json()
+        else:
+            return poema.to_json_public()
+    
+    
+    
     #metodo delete
     def delete(self,id):
         poema = db.session.query(PoemaModel).get_or_404(id)

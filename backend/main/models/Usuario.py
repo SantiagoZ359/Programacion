@@ -1,4 +1,6 @@
 from email.policy import default
+from enum import unique
+from tokenize import generate_tokens
 from .. import db
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -21,11 +23,13 @@ class Usuario(db.Model):
     @property
     def plain_password(self):
         raise AttributeError('Contraseña no leible')
+    
     #Setter de la contraseña plana no permite leerla
     #Calcula el hash y lo guarda en el atributo password
     @plain_password.setter
     def plain_password(self, contraseña):
         self.contraseña = generate_password_hash(contraseña)
+    
     #Metodo que compara una contraseña en texto plano con el hash guardado en la db
     def validate_pass(self, contraseña):
         return check_password_hash(self.contraseña, contraseña)
@@ -33,6 +37,7 @@ class Usuario(db.Model):
 
     def __repr__(self):
         return '<Usuario: %r %r >'% (self.nombre, self.contraseña, self.rol, self.email)
+    
     def to_json(self):
         usuario_json = {
             'id': self.id,
@@ -67,6 +72,25 @@ class Usuario(db.Model):
         }
         return usuario_json
     
+    def to_json_short_email(self):
+        usuario_json = {
+        'id': self.id,
+        'nombre': str(self.nombre),
+        'email': str(self.email),   
+        }
+        return usuario_json
+
+    def to_json_short_pAm(self):
+        usuario_json = {
+            'id': self.id,
+            'nombre': str(self.nombre),
+            'num_calificaciones': len(self.calificaciones),
+            'num_poemas': len(self.poemas),
+        }
+        return usuario_json
+
+
+
     @staticmethod
     def from_json(usuario_json):
         id = usuario_json.get('id')

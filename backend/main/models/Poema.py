@@ -21,16 +21,27 @@ class Poema(db.Model):
     
 
     #promedio de calificaciones
-    def prom_calif(self):
-        nota_list = []
+    #def prom_calif(self):
+    #    nota_list = []
+    #    if len(self.calificaciones) == 0:
+    #        prom = 0
+    #    else:
+    #        for calificacion in self.calificaciones:
+    #            nota = calificacion.nota
+    #            nota_list.append(nota)
+    #        prom = statistics.mean(nota_list)
+    #    return prom
+
+    def promedio_nota(self):
+        notas_lista = []
         if len(self.calificaciones) == 0:
-            prom = 0
+            avg = 0
         else:
             for calificacion in self.calificaciones:
                 nota = calificacion.nota
-                nota_list.append(nota)
-            prom = statistics.mean(nota_list)
-        return prom
+                notas_lista.append(nota)
+            avg = statistics.mean(notas_lista)
+        return avg
 
     def to_json(self):   
         poema_json = {
@@ -40,7 +51,7 @@ class Poema(db.Model):
             'fecha': str(self.fecha.strftime("%d-%m-%Y")),
             'usuario': self.usuario.to_json(),
             'calificaciones': [calificacion.to_json_short() for calificacion in self.calificaciones],
-            'promedio': self.prom_calif(),
+            'promedio': str(self.promedio_nota()),
         }
         return poema_json
 
@@ -50,7 +61,7 @@ class Poema(db.Model):
             'titulo': str(self.titulo),
             'fecha': str(self.fecha.strftime("%d-%m-%Y")),
             'usuario': self.usuario.to_json_short(),
-            'promedio': self.prom_calif(),
+            'promedio': str(self.promedio_nota()),
         }
         return poema_json
     
@@ -58,9 +69,11 @@ class Poema(db.Model):
         poema_json = {
             'id': self.id,
             'titulo': str(self.titulo),
-            'fecha': str(self.fecha.strftime("%d-%m-%Y"))
+            'usuario':self.usuario.to_json_short(),
+            'cuerpo':str(self.cuerpo)
         }
-    
+        return poema_json
+
     @staticmethod
     
     #Convertir JSON a objeto

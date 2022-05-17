@@ -32,6 +32,6 @@ def add_claims_to_access_token(usuario):
     claims = {
         'rol': usuario.rol,
         'id': usuario.id,
-        'email': usuario.id
+        'email': usuario.email
     }
     return claims

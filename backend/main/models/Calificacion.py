@@ -21,15 +21,15 @@ class Calificacion(db.Model):
             'id': self.id,
             'nota': str(self.nota),
             'comentario': str(self.comentario),
-            'usuario':(self.usuario.to_json()),
-            'poema':(self.poema.to_json()),
+            'usuario':self.usuario.to_json(),
+            'poema':self.poema.to_json(),
         }
         return calificacion_json
     
     def to_json_short(self):
         calificacion_json = {
             'id': self.id,
-            'nota': str(self.nota),
+            'nota': self.nota,
             'usuario': self.usuario.to_json_short(),
         }
         return calificacion_json
