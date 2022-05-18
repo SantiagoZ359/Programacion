@@ -1,10 +1,12 @@
 from flask_restful import Resource
 from flask import request, jsonify
+from .. import db
+from main.models import UsuarioModel
+from sqlalchemy import func
+from main.models import PoemaModel
 from main.models import UsuarioModel
 from main.models import CalificacionModel
-from main.models import PoemaModel
-from .. import db
-from sqlalchemy import func
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from main.auth.decorators import admin_required
 
 #Usuarios
@@ -15,22 +17,34 @@ from main.auth.decorators import admin_required
 #}
 
 class Usuario(Resource):
+    
     #metodo get
+    
+    @jwt_required(Optional = True)
     def get(self,id):
         usuario = db.session.query(UsuarioModel).get_or_404(id)
-        return usuario.to_json()
+        identidad_usuario = get_jwt_identity()
+        if identidad_usuario:
+            return usuario.to_json_short_email()
+        else:
+            return usuario.to_json_short
+    
     #metodo delete
+    @jwt_required
     @admin_required
     def delete(self,id):
         usuario = db.session.query(UsuarioModel).get_or_404(id)
         db.session.delete(usuario)
         db.session.commit()
         return '',204
+    
     #metodo put
+    @jwt_required
+    @admin_required
     def put(self,id):
         usuario = db.session.query(UsuarioModel).get_or_404(id)
         data = request.get_json().items()
-        for key,value in data:
+        for key,valor in data:
             setattr(usuario,key,valor)
         db.session.add(usuario)
         db.session.commit()
@@ -38,6 +52,7 @@ class Usuario(Resource):
 
 
 class Usuarios(Resource):
+    @admin_required
     def get(self):
         pagina = 1
         por_pagina = 10
@@ -67,14 +82,20 @@ class Usuarios(Resource):
                     if valor == 'num_poemas':
                         print("Dentro")
                         usuarios = usuarios.outerjoin(UsuarioModel.calificaciones).group_by(func.count(UsuarioModel.id))
+                    #Por calificaciones descendente
+                    if valor == 'num_calificaciones':
+                        print("dentro")
+                        usuarios = usuarios.outerjoin(UsuarioModel.calificaciones).group_by(UsuarioModel.id).order_by(func.count(UsuarioModel.id).desc())
 
-        users = usuarios.paginacion(pagina, por_pagina, True,18)
-        return jsonify({'usuarios': [usuario.to_json_short() for usuario in usuarios.items],
+
+        usuarios = usuarios.paginacion(pagina, por_pagina, True,18)
+        return jsonify({'usuarios': [usuario.to_json_short_pAm() for usuario in usuarios.items],
                     'total':usuarios.total,
-                    'paginas':usuarios.pages,
+                    'paginas':usuarios.paginas,
                     'pagina': pagina
                     })
 
+    @admin_required
     def post(self):
         usuario = UsuarioModel.from_json(request.get_json())
         db.session.add(usuario)
