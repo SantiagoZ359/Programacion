@@ -30,14 +30,31 @@ class Poema(Resource):
         else:
             return poema.to_json_public()
     
-    
-    
     #metodo delete
+    @jwt_required()
     def delete(self,id):
         poema = db.session.query(PoemaModel).get_or_404(id)
-        db.session.delete(poema)
-        db.session.commit()
-        return '',204
+        #Verificar si se ha ingresado con token
+        identidad_usuario = get_jwt_identity()
+        #Asociar poema a usuario
+        poema.userid = identidad_usuario
+        
+        #Obtener claims de adentro del JWT
+        claims = get_jwt()
+        #admin o creador pueda borrar el mismo.
+        if claims['rol'] == "admin" or poema.usuario_id == identidad_usuario:
+            try:
+                db.session.delete(poema)
+                db.session.commit()
+            except Exception as error:
+                return 'Formato incorrecto',204
+            return poema.to_json(), 201
+        else:
+            return 'No tienes permiso para realizar esta acción.', 403
+
+    
+    
+    
     #metodo put
     def put(self,id):
         poema = db.session.query(PoemaModel).get_or_404(id)
