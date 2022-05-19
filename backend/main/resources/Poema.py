@@ -67,7 +67,7 @@ class Poema(Resource):
 
 
 class Poemas(Resource):
-    jwt_required(optional=True)
+    @jwt_required(optional=True)
     def get (self):
         filtros = request.data
         poemas = db.session.query(PoemaModel)
@@ -89,7 +89,7 @@ class Poemas(Resource):
 
         if request.get_json():
             if identidad_usuario:
-                poemas = db.session.query(PoemaModel).filtro(PoemaModel.usuario_id != identidad_usuario).order_by(PoemaModel.fecha).outerjoin(PoemaModel.calificaciones).group_by(PoemaModel.id).order_by(CalificacionModel.nota)
+                poemas = db.session.query(PoemaModel).filter(PoemaModel.usuario_id != identidad_usuario).order_by(PoemaModel.fecha).outerjoin(PoemaModel.calificaciones).group_by(PoemaModel.id).order_by(CalificacionModel.nota)
 
             else:
                 for key, valor in filtros:
@@ -132,9 +132,9 @@ class Poemas(Resource):
                     if valor == 'nombre_autor[desc]':
                         poemas == poemas.outerjoin(PoemaModel.usuario).group_by(UsuarioModel.id).order_by((UsuarioModel.nombre).desc())
 
-        poemas = poemas.paginamiento(pagina,por_pagina, True, 10)
+        poemas = poemas.paginate(pagina,por_pagina, True, 10)
         return jsonify ({"poemas":[poema.to_json_short() for poema in poemas.items],
-        "total": poemas.total, "paginas": poemas.paginas, "pagina": pagina})
+        "total": poemas.total, "paginas": poemas.pages, "pagina": pagina})
 
     @jwt_required()
     def post(self):

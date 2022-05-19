@@ -19,10 +19,10 @@ class Calificacion(db.Model):
     def to_json(self):
         calificacion_json = {
             'id': self.id,
-            'nota': str(self.nota),
+            'nota': int(self.nota),
             'comentario': str(self.comentario),
-            'usuario':self.usuario.to_json(),
-            'poema':self.poema.to_json(),
+            'usuario':self.usuario.to_json_short(),
+            'poema':self.poema.to_json_short(),
         }
         return calificacion_json
     
@@ -33,6 +33,7 @@ class Calificacion(db.Model):
             'usuario': self.usuario.to_json_short(),
         }
         return calificacion_json
+    
     @staticmethod
     def from_json(calificacion_json):
         id = calificacion_json.get('id')

@@ -20,7 +20,7 @@ class Usuario(Resource):
     
     #metodo get
     
-    @jwt_required(Optional = True)
+    @jwt_required(optional=True)
     def get(self,id):
         usuario = db.session.query(UsuarioModel).get_or_404(id)
         identidad_usuario = get_jwt_identity()
@@ -30,7 +30,7 @@ class Usuario(Resource):
             return usuario.to_json_short
     
     #metodo delete
-    @jwt_required
+    @jwt_required()
     @admin_required
     def delete(self,id):
         usuario = db.session.query(UsuarioModel).get_or_404(id)
@@ -39,7 +39,7 @@ class Usuario(Resource):
         return '',204
     
     #metodo put
-    @jwt_required
+    @jwt_required()
     @admin_required
     def put(self,id):
         usuario = db.session.query(UsuarioModel).get_or_404(id)
@@ -88,10 +88,10 @@ class Usuarios(Resource):
                         usuarios = usuarios.outerjoin(UsuarioModel.calificaciones).group_by(UsuarioModel.id).order_by(func.count(UsuarioModel.id).desc())
 
 
-        usuarios = usuarios.paginacion(pagina, por_pagina, True,18)
+        usuarios = usuarios.paginate(pagina, por_pagina, True,18)
         return jsonify({'usuarios': [usuario.to_json_short_pAm() for usuario in usuarios.items],
                     'total':usuarios.total,
-                    'paginas':usuarios.paginas,
+                    'paginas':usuarios.pages,
                     'pagina': pagina
                     })
 
