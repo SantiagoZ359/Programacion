@@ -58,17 +58,17 @@ class Poema(db.Model):
     def to_json_short(self):
         poema_json = {
             'id': self.id,
-            'titulo': str(self.titulo),
+            'titulo': self.titulo,
             'fecha': str(self.fecha.strftime("%d-%m-%Y")),
             'usuario': self.usuario.to_json_short(),
-            'promedio': str(self.promedio_nota()),
+            'promedio': self.promedio_nota(),
         }
         return poema_json
     
     def to_json_public(self):
         poema_json = {
             'id': self.id,
-            'titulo': str(self.titulo),
+            'titulo': self.titulo,
             'usuario':self.usuario.to_json_short(),
             'cuerpo':str(self.cuerpo)
         }

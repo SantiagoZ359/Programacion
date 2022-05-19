@@ -35,15 +35,23 @@ class Calificacion(Resource):
         else:
             return 'No tienes permisos para realizar esta accion.', 403
     
-    @jwt_required
+    @jwt_required()
     def put(self,id):
         calificacion = db.session.query(CalificacionModel).get_or_404(id)
-        data = request.get_json().items()
-        for key, valor in data:
-            setattr(calificacion, key, valor)
-        db.session.add(calificacion)
-        db.session.commit()
-        return calificacion.to_json(), 201
+        identidad_usuario = get_jwt_identity()
+        calificacion.calificacionId = identidad_usuario
+        if calificacion.usuario_id == identidad_usuario:
+            try:
+                data = request.get_json().items()
+                for key, valor in data:
+                    setattr(calificacion,key,valor)
+                db.session.add(calificacion)
+                db.session.commit()
+            except Exception as error:
+                return 'Formato Invalido', 204
+            return calificacion.to_json(), 201
+        else:
+            return 'No tienes permiso para realizar esta accion.', 403
 
 class Calificaciones(Resource):
     def get (self):

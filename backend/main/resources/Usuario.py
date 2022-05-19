@@ -27,7 +27,7 @@ class Usuario(Resource):
         if identidad_usuario:
             return usuario.to_json_short_email()
         else:
-            return usuario.to_json_short
+            return usuario.to_json_short()
     
     #metodo delete
     @jwt_required()
@@ -68,7 +68,7 @@ class Usuarios(Resource):
                 
                 #filtro nombre
                 if key == 'nombre':
-                    usuarios = usuarios.filtro(UsuarioModel.nombre.like('%'+valor+'%'))
+                    usuarios = usuarios.filter(UsuarioModel.nombre.like('%'+valor+'%'))
                 
                 #ordenamientos
                 if key == "ordenar_por":

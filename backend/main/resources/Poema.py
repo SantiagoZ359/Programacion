@@ -1,12 +1,14 @@
-from datetime import *
-from flask_restful import Resource
 from itertools import count
 from locale import currency
+from flask_restful import Resource
 from flask import request, jsonify
-from main.models import PoemaModel, UsuarioModel, CalificacionModel
-from sqlalchemy import func
-from .. import db
 import jwt
+from .. import db
+from main.models import PoemaModel
+from main.models import UsuarioModel
+from main.models import CalificacionModel
+from sqlalchemy import func
+from datetime import *
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from main.auth.decorators import admin_required
 from flask_jwt_extended import verify_jwt_in_request, get_jwt
@@ -23,7 +25,7 @@ class Poema(Resource):
     @jwt_required(optional=True)
     def get(self,id):
         poema = db.session.query(PoemaModel).get_or_404(id)
-        return poema.to_json()
+        
         identidad = get_jwt_identity()
         if identidad:
             return poema.to_json()
@@ -36,8 +38,6 @@ class Poema(Resource):
         poema = db.session.query(PoemaModel).get_or_404(id)
         #Verificar si se ha ingresado con token
         identidad_usuario = get_jwt_identity()
-        #Asociar poema a usuario
-        poema.poetaId = identidad_usuario
         
         #Obtener claims de adentro del JWT
         claims = get_jwt()
