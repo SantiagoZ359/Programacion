@@ -31,7 +31,7 @@ class Calificacion(Resource):
                 db.session.commit()
             except Exception as error:
                 return 'Formato Invalido', 204
-            return calificacion.to_json(), 201
+            return 'Eliminado', 201
         else:
             return 'No tienes permisos para realizar esta accion.', 403
     

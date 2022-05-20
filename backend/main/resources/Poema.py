@@ -48,7 +48,7 @@ class Poema(Resource):
                 db.session.commit()
             except Exception as error:
                 return 'Formato incorrecto',204
-            return poema.to_json(), 201
+            return '', 201
         else:
             return 'No tienes permiso para realizar esta acción.', 403
 
