@@ -1,3 +1,4 @@
+import email
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
@@ -8,6 +9,8 @@ from main.models import UsuarioModel
 from main.models import CalificacionModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from main.auth.decorators import admin_required
+from flask_mail import Mail
+from main.mail.functions import sendMail
 
 #Usuarios
 
@@ -98,6 +101,21 @@ class Usuarios(Resource):
     @admin_required
     def post(self):
         usuario = UsuarioModel.from_json(request.get_json())
-        db.session.add(usuario)
-        db.session.commit()
-        return usuario.to_json(), 201
+        mail_existente = db.session.query(UsuarioModel).filter(UsuarioModel.email == usuario.email).scalar() is not None
+        nombre_existente = db.session.query(UsuarioModel).filter(UsuarioModel.nombre == usuario.nombre).scalar() is not None
+
+        if mail_existente:
+            return 'Direccion de Email ya utilizada.', 409
+        elif nombre_existente:
+            return 'Nombre de usuario ya utilizado', 409
+        else:
+            try:
+                db.session.add(usuario)
+                db.session.commit()
+                #envio de mail
+
+                send = sendMail([usuario.email], "Fuiste registrado en nuestro foro de poemas", usuario = usuario, rol = usuario)
+            except Exception as e:
+                db.session.rolleback()
+                return 'Formato Invalido', 409
+            return usuario.to_json(),201
