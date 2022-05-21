@@ -1,9 +1,12 @@
+#librerias
 import os
+import resource
 from flask import Flask
 from dotenv import load_dotenv
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
+from flask_mail import Mail
 
 #Inicializa API de Flask Restful
 api = Api()
@@ -11,6 +14,8 @@ api = Api()
 db = SQLAlchemy()
 #Inicializamos JWT
 jwt = JWTManager()
+#Inicializamos el mailsender
+mailsender = Mail
 
 def create_app():
     app= Flask(__name__)
@@ -31,7 +36,7 @@ def create_app():
     api.add_resource(resources.PoemaResource, '/poema/<id>')
     api.add_resource(resources.UsuariosResource, '/usuarios')
     api.add_resource(resources.UsuarioResource, '/usuario/<id>')
-    api.init_app(app)
+    #api.init_app(app)
     
     #Cargar clave secreta
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
@@ -43,4 +48,16 @@ def create_app():
     #Importar blueprint
     app.register_blueprint(routes.auth)
 
+    #configuracion de email.
+    app.config['MAIL_HOSTNAME'] = os.getenv('MAIL_HOSTNAME')
+    app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+    app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
+    app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS')
+    app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+    app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+    app.config['FLASKY_MAIL_SENDER'] = os.getenv('FLASKY_MAIL_SENDER')
+    #Inicializamos la app
+    mailsender.__init__app(app)
+
+    api.init_app(app)
     return app

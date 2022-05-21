@@ -107,7 +107,7 @@ class Usuarios(Resource):
         if mail_existente:
             return 'Direccion de Email ya utilizada.', 409
         elif nombre_existente:
-            return 'Nombre de usuario ya utilizado', 409
+            return 'Nombre de usuario ya utilizado.', 409
         else:
             try:
                 db.session.add(usuario)
@@ -115,7 +115,7 @@ class Usuarios(Resource):
                 #envio de mail
 
                 send = sendMail([usuario.email], "Fuiste registrado en nuestro foro de poemas", usuario = usuario, rol = usuario)
-            except Exception as e:
+            except Exception as error:
                 db.session.rolleback()
                 return 'Formato Invalido', 409
             return usuario.to_json(),201
