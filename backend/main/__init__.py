@@ -15,7 +15,7 @@ db = SQLAlchemy()
 #Inicializamos JWT
 jwt = JWTManager()
 #Inicializamos el mailsender
-mailsender = Mail
+mailsender = Mail()
 
 def create_app():
     app= Flask(__name__)
@@ -57,7 +57,7 @@ def create_app():
     app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
     app.config['FLASKY_MAIL_SENDER'] = os.getenv('FLASKY_MAIL_SENDER')
     #Inicializamos la app
-    mailsender.__init__app(app)
+    mailsender.init_app(app)
 
     api.init_app(app)
     return app

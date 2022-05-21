@@ -3,6 +3,8 @@ from locale import currency
 from flask_restful import Resource
 from flask import request, jsonify
 import jwt
+
+
 from .. import db
 from main.models import PoemaModel
 from main.models import UsuarioModel
@@ -12,6 +14,8 @@ from datetime import *
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from main.auth.decorators import admin_required
 from flask_jwt_extended import verify_jwt_in_request, get_jwt
+from flask_mail import Mail
+from main.mail.functions import sendMail
 
 #Poemas
 
@@ -152,6 +156,7 @@ class Poemas(Resource):
             try:
                 db.session.add(poema)
                 db.session.commit()
+                send = sendMail([calificacion.poema.usuario.email],"Tu poema ha sido calificado",'calificado', usuario1 = usuario, usuario = Calificacion.poema.usuario, poema = Calificacion.poema)
             except Exception as error:
                 return 'Formato incorrecto', 400
             return poema.to_json(), 201

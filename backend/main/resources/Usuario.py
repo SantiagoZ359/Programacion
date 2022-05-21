@@ -114,8 +114,8 @@ class Usuarios(Resource):
                 db.session.commit()
                 #envio de mail
 
-                send = sendMail([usuario.email], "Fuiste registrado en nuestro foro de poemas", usuario = usuario, rol = usuario)
+                send = sendMail([usuario.email], "Fuiste registrado en nuestro foro de poemas", 'register', usuario = usuario, rol = usuario)
             except Exception as error:
-                db.session.rolleback()
+                db.session.rollback()
                 return 'Formato Invalido', 409
             return usuario.to_json(),201

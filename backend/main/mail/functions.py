@@ -1,4 +1,3 @@
-from tkinter.tix import Tree
 from .. import mailsender
 from flask import current_app, render_template
 from flask_mail import Message
