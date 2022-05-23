@@ -64,18 +64,18 @@ class Calificaciones(Resource):
     def post(self):
         
         calificacion = CalificacionModel.from_json(request.get_json())
-        identidad_usuario = get_jwt_identity
+        identidad_usuario = get_jwt_identity()
         calificacion.calificacionId = identidad_usuario
         claims = get_jwt()
         #creo la variable usuario donde traigo cual usuario es igual al id de identidad_usuario
         
         usuario = db.session.query(UsuarioModel).get(identidad_usuario)
-        if identidad_usuario and claims["rol"] != "admin":
+        if usuario and claims["rol"] != "admin":
             try:
                 db.session.add(calificacion)
                 db.session.commit()
                 #parte de email, entre los [] esta el email del user que realizo la calificacion
-                send = sendMail([calificacion.poema.usuario.email],"Tu poema recibio una calificacion",usuario1 = usuario, usuario = calificacion.poema.usuario, poema = calificacion.poema )
+                send = sendMail([calificacion.poema.usuario.email],"Tu poema recibio una calificacion",'calificado',usuario1 = usuario, usuario = calificacion.poema.usuario, poema = calificacion.poema )
             except Exception as error:
                 db.session.rollback()
                 return 'Formato incorrecto', 409
