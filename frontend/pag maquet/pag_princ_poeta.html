@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Poemas</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    </head>
+    <body>
+
+        <main>
+ 
+            <div class="container mb-5">
+                <header class="d-flex flex-wrap justify-content-center py-2 mb-4 border-bottom">
+                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                    <span class="fs-4">Foro Poemas</span>
+                </a>
+          
+                <ul class="nav nav-pills">
+                    
+                    <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                    <input type="search" class="form-control" placeholder="Buscar...." aria-label="Search">
+                    </form>
+                    <li class="nav-item"><a href="#" class="nav-link">Subir Poema</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Poemas</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">MENU</a></li>
+                </ul>
+                </header>
+            </div>
+        </main>
+    <!--Contenido-->
+
+    <div class="container px-0 py-0">
+        <h2 class="pb-1 border-bottom">NUESTROS POEMAS:</h2>
+        <!--Filtro-->
+        <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <div class="dropdown-menu d-block position-static pt-0 mx-4 rounded-3 shadow overflow-hidden w-300px">
+            <form class="p-2 mb-2 bg-light border-bottom">
+              <input type="search" class="form-control" autocomplete="false" placeholder="Filtrar por titulo...">
+            </form>
+            <ul class="list-unstyled mb-0">
+              <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
+                <span class="d-inline-block bg-success rounded-circle p-1"></span>
+                Ascendete
+              </a></li>
+              <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
+                <span class="d-inline-block bg-primary rounded-circle p-1"></span>
+                Descendente
+              </a></li>
+              
+            </ul>
+            
+          </div>
+        </div>
+        <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <div class="dropdown-menu d-block position-static pt-0 mx-4 rounded-3 shadow overflow-hidden w-280px">
+            <form class="p-2 mb-2 bg-light border-bottom">
+              <input type="search" class="form-control" autocomplete="false" placeholder="Filtrar por fecha...">
+            </form>
+            <ul class="list-unstyled mb-0">
+              <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
+                <span class="d-inline-block bg-success rounded-circle p-1"></span>
+                Ascendete
+              </a></li>
+              <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
+                <span class="d-inline-block bg-primary rounded-circle p-1"></span>
+                Descendente
+              </a></li>
+              
+            </ul>
+            
+          </div>
+        </div>
+        <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-">
+          <div class="dropdown-menu d-block position-static pt-0 mx-4 rounded-3 shadow overflow-hidden w-280px">
+            <form class="p-2 mb-2 bg-light border-bottom">
+              <input type="search" class="form-control" autocomplete="false" placeholder="Filtrar por calificacion...">
+            </form>
+            <ul class="list-unstyled mb-0">
+              <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
+                <span class="d-inline-block bg-success rounded-circle p-1"></span>
+                Ascendete
+              </a></li>
+              <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
+                <span class="d-inline-block bg-primary rounded-circle p-1"></span>
+                Descendente
+              </a></li>
+            </ul>
+          </div>
+        </div>
+  
+        <!--Poema-->
+        <div class="container px-4 py-1">
+          <h2 class="pb-2 border-bottom "></h2>
+               <div class="row g-4 py-5 row-cols-0 row-cols-lg-1">
+          <div class="col d-block position-static pt-0 mx-1 rounded-3 shadow overflow-hidden w-200px d-flex align-items-start">
+            <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-1 flex-shrink-0 me-1">
+              <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"></use></svg>
+            </div>
+            <div>
+              <h2>Titulo del poema</h2>
+              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy...</p>
+              <a href="#" class="btn btn-primary">
+                Seguir leyendo
+              </a>
+            </div>
+          </div>
+          <div class="col d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-200px d-flex align-items-start">
+            <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-1 flex-shrink-0 me-1">
+              <svg class="bi" width="1em" height="1em"><use xlink:href="#cpu-fill"></use></svg>
+            </div>
+            <div>
+              <h2>Titulo del poema</h2>
+              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy...</p>
+              <a href="#" class="btn btn-primary">
+                Seguir leyendo
+              </a>
+            </div>
+          </div>
+          <div class="col d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-200px d-flex align-items-start">
+            <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-1 flex-shrink-0 me-1">
+              <svg class="bi" width="1em" height="1em"><use xlink:href="#cpu-fill"></use></svg>
+            </div>
+            <div>
+              <h2>Titulo del poema</h2>
+              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy...</p>
+              <a href="#" class="btn btn-primary">
+                Seguir leyendo
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>  
+      
+      <!--pagna-->
+      <div class="container px-5">
+        <div class="bd-example">
+          <nav aria-label="Standard pagination example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                  <span aria-hidden="true">«</span>
+                </a>
+              </li>
+              <li class="page-item"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                  <span aria-hidden="true">»</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      
+  
+      <!-- Pie --> 
+      <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+          <span class="text-muted">Foro Poemas © <script>document.write(new Date().getFullYear())</script> </span>
+        </div>
+      </footer>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    
+    
+    
+    </body>
+</html>
+  
