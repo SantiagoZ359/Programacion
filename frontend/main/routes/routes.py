@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template
+import requests
+import json
 
 
 app = Blueprint('app', __name__, url_prefix= '/')
@@ -9,6 +11,23 @@ def index():
 
 @app.route('/login')
 def login():
+
+    api_url ="http://127.0.0.1:8500/auth/login"
+    
+    data = {"email":"sn.zapata@alumno.um.edu.ar","contraseña":"1234"}
+    
+    headers = {"Content-Type" : "application/json"}
+    
+    response = requests.post(api_url, json = data, headers = headers)
+    
+    print(response.status_code)
+
+    token = json.loads(response.text)
+    token = token["access_token"]
+    print(response.status_code)
+    
+    print(response.text)
+
     return render_template ('login.html')
 
 @app.route('/editar_perfil')
