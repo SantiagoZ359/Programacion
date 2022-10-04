@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template
+from email import header
+from urllib import response
+from flask import Blueprint, render_template, make_response, Request
 import requests
 import json
 
@@ -7,7 +9,19 @@ app = Blueprint('app', __name__, url_prefix= '/')
 
 @app.route('/poeta')
 def index():
-    return render_template ('pag_princ_poeta.html')
+    #return render_template ('pag_princ_poeta.html')
+    api_url = "http://127.0.0.1:8500/poemas"
+
+    data = {"page":1, "por_pagina":3}
+    jwt =requests.cookies.get("access_token")
+    print(jwt)
+    headers = {"Content-Type": "application/json", "Authorization": "BEARER {}".format(jwt)}
+    response = requests.get(api_url, json = data, headers = headers)
+    print(response.status_code)
+    poemas = json.loads(response.text)
+    print(poemas)
+
+    return render_template('pag_princ_poeta.html', poemas = poemas["poemas"])
 
 @app.route('/login')
 def login():
@@ -21,14 +35,15 @@ def login():
     response = requests.post(api_url, json = data, headers = headers)
     
     print(response.status_code)
-
+    print(response.text)
+    
     token = json.loads(response.text)
     token = token["access_token"]
-    print(response.status_code)
-    
-    print(response.text)
+    print(token)
 
-    return render_template ('login.html')
+    resp = make_response(render_template('login.html'))
+    resp.set_cookie("access_token",token)
+    return resp
 
 @app.route('/editar_perfil')
 def editar_perfil():
