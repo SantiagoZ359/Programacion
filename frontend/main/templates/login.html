@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
     {% block content %}
     <!--Login-->
+    <form method="POST" id="form1" action="{{url_for('main.login')}}">
     <div class="modal-content rounded-3 shadow">
         <div class="modal-header p-5 pb-3 border-bottom-0">
           <!-- <h5 class="modal-title">Modal title</h5> -->
@@ -23,7 +24,7 @@
           </form>
         </div>
       </div>
-  
+    </form>
     </div>
   </div>
     {% endblock %}
