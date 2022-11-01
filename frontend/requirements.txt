@@ -1,5 +1,7 @@
 Flask
 python.dotenv
 requests
-json
 request
+flask-login
+PyJWT
+json

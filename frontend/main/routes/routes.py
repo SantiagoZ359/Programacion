@@ -1,6 +1,7 @@
 from email import header
 from urllib import response
-from flask import Blueprint, render_template, make_response, Request
+from flask import Blueprint, render_template, make_response, request
+from . import functions as f
 import requests
 import json
 
@@ -23,27 +24,27 @@ def index():
 
     return render_template('pag_princ_poeta.html', poemas = poemas["poemas"])
 
-@app.route('/login')
+@app.route("/login", methods=["GET", "POST"])
 def login():
+    if(request.method == "POST"):
+        email = request.form.get("email")
+        password = request.form.get("password")
 
-    api_url ="http://127.0.0.1:8500/auth/login"
-    
-    data = {"email":"sn.zapata@alumno.um.edu.ar","contraseña":"1234"}
-    
-    headers = {"Content-Type" : "application/json"}
-    
-    response = requests.post(api_url, json = data, headers = headers)
-    
-    print(response.status_code)
-    print(response.text)
-    
-    token = json.loads(response.text)
-    token = token["access_token"]
-    print(token)
+        if email != None and password != None:
 
-    resp = make_response(render_template('login.html'))
-    resp.set_cookie("access_token",token)
-    return resp
+            response = f.login(email,password)
+
+            if (response.ok):
+                response = json.loads(response.text)
+                token = response["access_token"]
+                
+                resp = make_response(index(jwt=token))
+                resp.set_cookie("access_token", token)
+                return resp
+
+        return render_template("pag_princ_poeta.html")
+    else:
+        return render_template("login.html")
 
 @app.route('/editar_perfil')
 def editar_perfil():

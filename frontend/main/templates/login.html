@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
     {% block content %}
     <!--Login-->
-    <form method="POST" id="form1" action="{{url_for('main.login')}}">
+    <form method="POST" id="form1" action="{{url_for('app.login')}}">
     <div class="modal-content rounded-3 shadow">
         <div class="modal-header p-5 pb-3 border-bottom-0">
           <!-- <h5 class="modal-title">Modal title</h5> -->
@@ -9,14 +9,13 @@
         </div>
   
         <div class="modal-body p-5 pt-0">
-          <form class="">
             <div class="form-floating mb-3">
-              <input type="email" class="form-control rounded-3" id="floatingInput" placeholder="name@example.com">
+              <input type="email" class="form-control rounded-3" id="email" placeholder="name@example.com" name="email">
               <label for="floatingInput">Direccion de correo electronico</label>
             </div>
             <div class="form-floating mb-3">
-              <input type="password" class="form-control rounded-3" id="floatingPassword" placeholder="Password">
-              <label for="floatingPassword">Contraseña</label>
+              <input type="password" class="form-control rounded-3" id="password" placeholder="password">
+              <label for="password">Contraseña</label>
             </div>
             <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">Ingresar</button>
             <hr class="my-4">

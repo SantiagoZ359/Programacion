@@ -5,32 +5,33 @@ from . import functions as f
 
 main = Blueprint('main', __name__, url_prefix='/')
 
-@main.route('/poeta')
-def index_poeta():
-    api_url = f'{current_app.config["API_URL"]}'
-    user_id = f.get_id()
-    user = f.get_user(user_id)
-    user = json.loads(user.text)
+# # @main.route('/poet')
+# # def index_poeta():
+# #     api_url = f'{current_app.config["API_URL"]}'
+# #     user_id = f.get_id()
+# #     user = f.get_user(user_id)
+# #     user = json.loads(user.text)
 
-    jwt = f.get_jwt()
-    response = f.get_poems(api_url)
+# #     jwt = f.get_jwt()
+# #     response = f.get_poems(api_url)
 
-    poemas = json.loads(response.text)
-    list_poemas = poemas["poemas"]
+# #     poemas = json.loads(response.text)
+# #     list_poemas = poemas["poemas"]
 
-    return render_template('pag_princ_poeta.html', user = user, jwt = jwt, poemas = list_poemas)
+# #     return render_template('pag_princ_poeta.html', user = user, jwt = jwt, poemas = list_poemas)
 
 @main.route('/')
-def index_user():
-    api_url = f'{current_app.config["API_URL"]}/poemas'
+def index(jwt = None):
+    if (jwt == None):
+        jwt=f.get_jwt()
+    
+    resp = f.get_poems(jwt = jwt)
 
-    response = f.get_poems(api_url)
-    print(response)
+    poems = f.get_json(resp)
+    list_poemas = poems["poems"]
 
-    poemas = json.loads(response.txt)
-    list_poemas = poemas["poemas"]
+    return render_template('pag_princ_user.html',jwt = jwt, poems = list_poemas)
 
-    return render_template('pag_princ_user.html', poems = list_poemas)
 
 @main.route("/login", methods=["GET", "POST"])
 def login():
@@ -39,31 +40,17 @@ def login():
         password = request.form.get("password")
 
         if email != None and password != None:
-            api_url = f'{current_app.config["API_URL"]}/auth/login'
-            data = {"email": email, "password":password}
-            headers = {"Content-Type" : "application/json"}
 
-            response = requests.post(api_url, json=data, headers=headers)
+            response = f.login(email,password)
 
             if (response.ok):
                 response = json.loads(response.text)
                 token = response["access_token"]
-                user_id = str(response["id"])
-
-                api_url = f'{current_app.config["API_URL"]}'
-                response = f.get_poems(api_url)
-
-                poems = json.loads(response.text)
-                list_poems = poems["poems"]
-                user = f.get_user(user_id)
-                user = json.loads(user.text)
-
-                resp = make_response(render_template("pag_princ_poeta", poems=list_poems, user=user))
+                
+                resp = make_response(index(jwt=token))
                 resp.set_cookie("access_token", token)
-                resp.set_cookie("id", user_id)
-
                 return resp
 
-        return render_template("login.html", error="Usuario o contraseña incorrectos")
+        return render_template("login.html")
     else:
         return render_template("login.html")
