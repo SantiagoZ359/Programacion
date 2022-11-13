@@ -9,11 +9,15 @@ def get_poem(id):
     headers = get_headers()
     return requests.get(api_url, headers=headers)
 
-def get_poems(api_url, page=1, porpage=3):
-    api_url = f'{current_app.config["API_URL"]}/poems'
-    data = {"page":page, "porpage":porpage}
-    headers = get_headers()
-    return requests.get(api_url, json=data, headers=headers)
+def get_poems(jwt = None, pagina=1, por_pagina=3):
+    api_url = f'{current_app.config["API_URL"]}/poemas'
+    data = {"pagina":pagina, "por_pagina":por_pagina}
+    
+    if (jwt):
+        headers = get_headers(jwt = jwt)
+    else:
+        headers = get_headers(without_token= True)
+    return requests.get(api_url, json = data, headers = headers)
 
 def get_user_info(id):
     api_url = f'{current_app.config["API_URL"]}/user/{id}'
@@ -22,17 +26,18 @@ def get_user_info(id):
     return requests.get(api_url, headers=headers)
 
 def get_user(id):
-    api_url = f'{current_app.config["API_URL"]}/user/{id}'
+    api_url = f'{current_app.config["API_URL"]}/usuario/{id}'
     headers = get_headers()
     return requests.get(api_url, headers=headers)
 
 def json_load(response):
     return json.loads(response.text)
 
-def get_headers(without_token = False):
-    jwt = get_jwt()
+def get_headers(without_token = False, jwt = None):
+    if jwt == None and without_token == False:
+        return{"Content-Type":"application/json", "Authorization": f"Bearer {get_jwt()}"}
     if jwt and without_token == False:
-        return{"Content-Type":"application/json", "Authorization":f"Bearer {jwt}"}
+        return{"Content-Type":"application/json", "Authorization": f"Bearer {jwt}"}
     else:
         return{"Content-Type":"application/json"}
 
@@ -51,9 +56,12 @@ def add_poem(api_url, titulo, contenido):
     headers = get_headers()
     return request.post(api_url, json=data, headers = headers)
 
-def login(email, password):
+def login(email, contraseña):
     api_url = f'{current_app.config["API_URL"]}/auth/login'
-    data = {"email": email, "password": password}
+    data = {"email": email, "contraseña": contraseña}
     headers = get_headers(without_token = True)
 
     return requests.post(api_url, json = data, headers = headers)
+
+def get_json(resp):
+    return json.loads(resp.text)
