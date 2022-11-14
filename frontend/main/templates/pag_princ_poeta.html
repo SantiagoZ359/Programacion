@@ -22,7 +22,7 @@
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
                 <input type="search" class="form-control" placeholder="Buscar...." aria-label="Search">
                 </form>
-                <li class="nav-item"><a href="subir_poema" class="nav-link">Subir Poema</a></li>
+                <li class="nav-item"><a href="{{url_for('app.create')}}" class="nav-link">Subir Poema</a></li>
                 <li class="nav-item"><a href="lista_poema_poeta" class="nav-link">Poemas</a></li>
             </ul>
             
@@ -104,44 +104,60 @@
         </div>
   
         <!--Poema-->
-        <div class="col d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-200px d-flex align-items-start">
-          <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-1 flex-shrink-0 me-1">
-            <svg class="bi" width="1em" height="1em"><use xlink:href="#cpu-fill"></use></svg>
-          </div>
-          <div>
-            <h2>Titulo del poema</h2>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy...</p>
-            <a href="ver_poema_poeta" class="btn btn-primary">
-              Seguir leyendo
-            </a>
-          </div>
-        </div>
-          <div class="col d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-200px d-flex align-items-start">
-            <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-1 flex-shrink-0 me-1">
-              <svg class="bi" width="1em" height="1em"><use xlink:href="#cpu-fill"></use></svg>
+        <tbody>
+          {% for poema in poemas %}
+            <div class="container px-4 py-1">
+            <h2 class="pb-2 border-bottom "></h2>
+                 <div class="row g-4 py-5 row-cols-0 row-cols-lg-1">
+            <div class="col d-block position-static pt-0 mx-1 rounded-3 shadow overflow-hidden w-200px d-flex align-items-start">
+              <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-1 flex-shrink-0 me-1">
+                <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"></use></svg>
+              </div>
+              <div>
+                <h2>{{poema.titulo}}</h2>
+                <p>{{poema.cuerpo}}</p>
+                <a href="ver_poema_user" class="btn btn-primary">
+                  Seguir leyendo
+                </a>
+              </div>
             </div>
-            <div>
-              <h2>Titulo del poema</h2>
-              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy...</p>
-              <a href="ver_poema_poeta" class="btn btn-primary">
-                Seguir leyendo
-              </a>
-            </div>
-          </div>
-          <div class="col d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-200px d-flex align-items-start">
-            <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-1 flex-shrink-0 me-1">
-              <svg class="bi" width="1em" height="1em"><use xlink:href="#cpu-fill"></use></svg>
-            </div>
-            <div>
-              <h2>Titulo del poema</h2>
-              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy...</p>
-              <a href="ver_poema_poeta" class="btn btn-primary">
-                Seguir leyendo
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>  
+          {% endfor %}
+          <tbody>
+            {% for poema in poemas %}
+              <div class="container px-4 py-1">
+              <h2 class="pb-2 border-bottom "></h2>
+                   <div class="row g-4 py-5 row-cols-0 row-cols-lg-1">
+              <div class="col d-block position-static pt-0 mx-1 rounded-3 shadow overflow-hidden w-200px d-flex align-items-start">
+                <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-1 flex-shrink-0 me-1">
+                  <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"></use></svg>
+                </div>
+                <div>
+                  <h2>{{poema.titulo}}</h2>
+                  <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy...</p>
+                  <a href="ver_poema_user" class="btn btn-primary">
+                    Seguir leyendo
+                  </a>
+                </div>
+              </div>
+            {% endfor %}
+            <tbody>
+              {% for poema in poemas %}
+                <div class="container px-4 py-1">
+                <h2 class="pb-2 border-bottom "></h2>
+                     <div class="row g-4 py-5 row-cols-0 row-cols-lg-1">
+                <div class="col d-block position-static pt-0 mx-1 rounded-3 shadow overflow-hidden w-200px d-flex align-items-start">
+                  <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-1 flex-shrink-0 me-1">
+                    <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"></use></svg>
+                  </div>
+                  <div>
+                    <h2>{{poema.titulo}}</h2>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy...</p>
+                    <a href="ver_poema_user" class="btn btn-primary">
+                      Seguir leyendo
+                    </a>
+                  </div>
+                </div>
+              {% endfor %}
       
       <!--pagna-->
       <div class="container px-5">

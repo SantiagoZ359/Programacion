@@ -1,7 +1,8 @@
 from email import header
 from urllib import response
-from flask import Blueprint, render_template, make_response, request, current_app
+from flask import Blueprint, render_template, make_response, request, current_app, url_for, redirect
 from . import functions as f
+from . import auth
 import requests
 import json
 
@@ -9,7 +10,7 @@ import json
 app = Blueprint('app', __name__, url_prefix= '/')
 
 @app.route('/poeta')
-def index(jwt = None):
+def index_poeta(jwt = None):
     
     if jwt == None:
         jwt =f.get_jwt()
@@ -55,7 +56,7 @@ def login():
                 token = response["access_token"]
                 user_id = str(response["id"])
                 # Guardar el token en las cookies y devuelve la página.
-                resp = make_response(index(jwt=token))
+                resp = make_response(index_poeta(jwt=token))
                 #resp = make_response(redirect(url_for('main.index'), token))
                 resp.set_cookie("access_token", token)
                 resp.set_cookie("id", user_id)
@@ -64,18 +65,16 @@ def login():
     else:
         return render_template("login.html")
 
-# @app.route('/')
-# def index(jwt = None):
-#     if (jwt == None):
-#         jwt=f.get_jwt()
+@app.route('/')
+def index_user():
+    api_url = f'{current_app.config["API_URL"]}/poemas'
     
-#     resp = f.get_poems(jwt = jwt)   
+    response = f.get_poems(api_url)
 
-#     poems = f.get_json(resp)
-#     list_poemas = poems["poems"]
-
-#     return render_template('pag_princ_user.html',jwt = jwt, poems = list_poemas)
-
+    print(response)
+    poems = json.loads(response.text)
+    list_poems = poems["poemas"]
+    return render_template('pag_princ_user.html', poems=list_poems)
 
 @app.route('/editar_perfil')
 def editar_perfil():
@@ -89,29 +88,83 @@ def lista_poemas_usuario():
 def lista_poem_poeta():
     return render_template ('lista_poema_poeta.html')
 
-@app.route('/user')
-def index_user():
-    api_url = f'{current_app.config["API_URL"]}/poemas'
+# @app.route('/user')
+# def index_user():
+#     api_url = f'{current_app.config["API_URL"]}/poemas'
     
-    response = f.get_poems(api_url)
+#     response = f.get_poems(api_url)
 
-    print(response)
-    poems = json.loads(response.text)
-    list_poems = poems["poemas"]
-    return render_template('pag_princ_user.html', poems=list_poems)
+#     print(response)
+#     poems = json.loads(response.text)
+#     list_poems = poems["poemas"]
+#     return render_template('pag_princ_user.html', poems=list_poems)
 
 @app.route('/perfil')
-def perfil():
-    return render_template ('perfil.html')
+def details():
+    jwt = f.get_jwt()
+    if jwt:
+        user = auth.load_user(jwt)
+        # Guardamos la información de usuario en una variable.
+        user_info = f.get_user_info(user["id"])
+        user_info = json.loads(user_info.text)
 
-@app.route('/subir_poema')
-def subir_poema():
-    return render_template ('subir_poema.html')
+        return render_template('perfil.html', jwt = jwt, user_info = user_info)
+    else:
+        return redirect(url_for('app.login'))
 
-@app.route('/ver_poema_poeta')
-def ver_poema_poeta():
-    return render_template ('ver_poema_poeta.html')
+@app.route('/create', methods=['GET', 'POST'])
+def create():
+    jwt = f.get_jwt()
+    if jwt:
+        if request.method == 'POST':
+            title = request.form['titulo']
+            body = request.form['cuerpo']
+            print(title)
+            print(body)
+            id = f.get_id()
+            print(id)
+            data = {"usuario_id": id, "titulo": title, "cuerpo": body}
+            headers = f.get_headers(without_token=False)
+            if title != "" and body != "":
+                response = requests.post(f'{current_app.config["API_URL"]}/poemas', json=data, headers=headers)
+                print(response)
+                if response.ok:
+                    response = f.json_load(response)
+                    return redirect(url_for('app.view_user', id=response["id"], jwt=jwt))
+                else:
+                    return redirect(url_for('app.create'))
+            else:
+                return redirect(url_for('app.create'))
+        else:
+            #Mostrar template
+            return render_template('subir_poema.html', jwt=f.get_jwt())
+    else:
+        return redirect(url_for('app.login'))
+
+@app.route('/ver_user/<int:id>')
+def view_user(id):
+    if request.cookies.get('access_token'):
+        jwt = f.get_jwt()
+        poem = f.get_poem(id)
+        poem = json.loads(poem.text)
+        resp = f.get_marks_by_poem_id(id)
+        marks = json.loads(resp.text)
+        #Mostrar template
+        return render_template('ver_poema_poeta.html', jwt = jwt, poem = poem, marks = marks)
+    else:
+        poem = f.get_poem(id)
+        poem = json.loads(poem.text)
+        resp = f.get_marks_by_poem_id(id)
+        marks = json.loads(resp.text)
+        return render_template('ver_poema_user.html', poem=poem, marks = marks)
 
 @app.route('/ver_poema_user')
 def ver_poema_user():
     return render_template ('ver_poema_user.html')
+
+@app.route("/logout")
+def logout():
+    resp = make_response(redirect(url_for("app.login")))
+    resp.delete_cookie("access_token")
+    resp.delete_cookie("id")
+    return resp

@@ -22,7 +22,7 @@
                     <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
                     <input type="search" class="form-control" placeholder="Buscar...." aria-label="Search">
                     </form>
-                    <li class="nav-item"><a href="subir_poema" class="nav-link">Subir Poema</a></li>
+                    <li class="nav-item"><a href="{{url_for('app.create')}}" class="nav-link">Subir Poema</a></li>
                     <li class="nav-item"><a href="lista_poema_poeta" class="nav-link">Poemas</a></li>
                 </ul>
                 
@@ -51,18 +51,17 @@
         <h2 class="pb-1 border-bottom">Subir Poema:</h2>
     
     <div class="container px-4 py-1">
-    <form>
+    <form method="POST" id="form2" action="/create">
         <div class="form-group">
           <label for="exampleFormControlInput1">Titulo del Poema</label>
-          <input type="Titulo" class="form-control" id="exampleFormControlInput1" placeholder="Titulo de ejemplo...">
+          <input type="titulo" class="form-control" name="titulo" placeholder="Titulo de ejemplo...">
         </div>
         <div class="container px-4 py-1">
-            <form>
             <div class="form-group">
-                <label for="exampleFormControlTextarea1">Cuerpo del poema:</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <label for="1">Cuerpo del poema:</label>
+                <textarea class="form-control" name="cuerpo" rows="3"></textarea>
             </div>
-        <input class="btn btn-primary" type="submit" value="Crear">
+        <button class="btn btn-primary" type="submit" >CREAR</button>
     
     </form>
     </div>

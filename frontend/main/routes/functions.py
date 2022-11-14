@@ -9,6 +9,14 @@ def get_poem(id):
     headers = get_headers()
     return requests.get(api_url, headers=headers)
 
+def get_poems_by_id(id, pagina = 1, por_pagina = 3):
+    api_url = f'{current_app.config["API_URL"]}/poemas'
+    data = {"pagina":pagina,"por_pagina":por_pagina,"usuario_id":id}
+
+    headers = get_headers(without_token= True)
+    return requests.get(api_url, json = data, headers= headers)
+
+
 def get_poems(jwt = None, pagina=1, por_pagina=3):
     api_url = f'{current_app.config["API_URL"]}/poemas'
     data = {"pagina":pagina, "por_pagina":por_pagina}
@@ -20,7 +28,7 @@ def get_poems(jwt = None, pagina=1, por_pagina=3):
     return requests.get(api_url, json = data, headers = headers)
 
 def get_user_info(id):
-    api_url = f'{current_app.config["API_URL"]}/user/{id}'
+    api_url = f'{current_app.config["API_URL"]}/usuario/{id}'
     headers = get_headers()
 
     return requests.get(api_url, headers=headers)
@@ -49,7 +57,10 @@ def get_id():
 
 def get_username(user_id):
     headers = get_headers
-    api_url = f'{current_app.config["API_URL"]}/user/{user_id}'
+    api_url = f'{current_app.config["API_URL"]}/usuario/{user_id}'
+    response = requests.get(api_url, headers = headers)
+    user = json.loads(response.text)
+    return user["nombre"]
 
 def add_poem(api_url, titulo, contenido):
     data = {"titulo":titulo, "contenido":contenido}
@@ -65,3 +76,18 @@ def login(email, contraseña):
 
 def get_json(resp):
     return json.loads(resp.text)
+
+def get_marks_by_poem_id(id):
+    api_url = f'{current_app.config["API_URL"]}/calificaciones'
+
+    data = {"poema_id": id}
+    headers = get_headers()
+    return requests.get(api_url, json = data, headers = headers)
+
+def get_marks_by_poet_id(id):
+    api_url = f'{current_app.config["API_URL"]}/calificaciones'
+
+    data = {"usuario_id": id}
+    headers = get_headers()
+    return requests.get(api_url, json = data, headers = headers)
+
