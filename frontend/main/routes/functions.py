@@ -24,7 +24,7 @@ def get_poems(jwt = None, pagina=1, por_pagina=3):
     if (jwt):
         headers = get_headers(jwt = jwt)
     else:
-        headers = get_headers(without_token= True)
+        headers = get_headers(without_token = True)
     return requests.get(api_url, json = data, headers = headers)
 
 def get_user_info(id):

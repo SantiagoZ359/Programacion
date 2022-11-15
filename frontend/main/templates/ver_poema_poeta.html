@@ -12,7 +12,7 @@
  
             <div class="container mb-5">
                 <header class="d-flex flex-wrap justify-content-center py-2 mb-4 border-bottom">
-                <a href="poeta" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+                <a href="{{url_for('app.index_poeta')}}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
                     <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
                     <span class="fs-4">Foro Poemas</span>
                 </a>
@@ -22,7 +22,7 @@
                     <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
                     <input type="search" class="form-control" placeholder="Buscar...." aria-label="Search">
                     </form>
-                    <li class="nav-item"><a href="subir_poema" class="nav-link">Subir Poema</a></li>
+                    <li class="nav-item"><a href="{{url_for('app.create')}}" class="nav-link">Subir Poema</a></li>
                     <li class="nav-item"><a href="lista_poema_poeta" class="nav-link">Poemas</a></li>
                 </ul>
                 
@@ -33,10 +33,10 @@
     </a>
   
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-      <li><a class="dropdown-item" href="perfil">Mi Perfil</a></li>
+      <li><a class="dropdown-item" href="{{url_for('app.details')}}">Mi Perfil</a></li>
       <li><a class="dropdown-item" href="editar_perfil">Editar cuenta</a></li>
       <div class="alert alert-danger" role="alert">
-        <a href="#" class="alert-link">Cerrar Sesion</a>
+        <a href="{{url_for('app.logout')}}" class="alert-link">Cerrar Sesion</a>
     </ul>
   </div>
                 </header>
@@ -51,10 +51,9 @@
                 <div class="col-md-11">
             
                     <article class="blog-post">
-                        <h2 class="blog-post-title mb-1">Titulo del poema</h2>
-                        <p class="blog-post-meta">fecha, por: <a href="#">Autor del poema</a></p>
-      
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                        <h2 class="blog-post-title mb-1">{{poem.titulo}}</h2>
+                        <p class="blog-post-meta">{{poem.fecha}}, por: <a href="#">{{poem.usuario.nombre}}</a></p>
+                        <p>{{poem.cuerpo}}</p>
                     </article>
                 </div>
                 
@@ -64,27 +63,42 @@
         <h2 class="pb-2 border-bottom "></h2>
         <!--Comentar-->
         <div class="container px-4 py-1">
-        <form>
+        <form method="POST" id="form4" action="/ver_poema/{{poem.id}}">
         <div class="form-group">
             <label for="exampleFormControlTextarea1">COMENTAR</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            <textarea class="form-control" id="exampleFormControlTextarea1" name = "commentary" rows="3"></textarea>
         </div>
-        <div class="form-group">
+
             <label for="exampleFormControlSelect1">Calificar</label>
-            <select class="form-control" id="exampleFormControlSelect1">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-            <div class="container px-4 py-1">
-                <input class="btn btn-primary" type="submit" value="Subir">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
+                <label class="form-check-label" for="inlineRadio1">1</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="">
+                <label class="form-check-label" for="inlineRadio1">2</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="3">
+                <label class="form-check-label" for="inlineRadio1">3</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="4">
+                <label class="form-check-label" for="inlineRadio1">4</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="5">
+                <label class="form-check-label" for="inlineRadio1">5</label>
+        </div>
+        <div class="container px-4 py-1">
+            <input class="btn btn-primary" type="submit" value="Subir">
+        </div>
         </form>
 
         
         <!-- Comentarios-->
-        <div class="container px-4 py-1">
+    <tbody>
+        {% for mark in marks %}
             <h2 class="pb-8 border-bottom "></h2>
              <div class="row g-4 py-5 row-cols-3 row-cols-lg-2">
             <div class="col d-block position-static pt-0 mx-1 rounded-3 shadow overflow-hidden w-200px d-flex align-items-start">
@@ -93,29 +107,15 @@
                 </div>
                 <div class="col-md-8">
             
-                    <article class="comentario">
-                        <h2 class="comentario mb-1">Titulo del comentario</h2>
-                        <p class="comentario">fecha, por: <a href="#">Autor del coment</a></p>
-      
-                        <p>Lorem Ipsum is simply dummy text of the printing.</p>
-                    </article>
-                </div>
-            </div>
-            <div class="col d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-200px d-flex align-items-start">
-                <div class="icon-square bg-light text-light d-inline-flex align-items-center justify-content-center fs-1 flex-shrink-0 me-1">
-                  <svg class="bi" width="1em" height="1em"><use xlink:href="#cpu-fill"></use></svg>
-                </div>
-                <div class="col-md-8">
-            
-                    <article class="comentario">
-                        <h2 class="comentario mb-1">Titulo del comentario</h2>
-                        <p class="comentario">fecha, por: <a href="#">Autor del coment</a></p>
-      
-                        <p>Lorem Ipsum is simply dummy text of the printing.</p>
-                    </article>
+                    <div class="coment-text">
+                        <p>{{mark.usuario.nombre}}</p>
+                        <p>{{mark.comentario}}</p>
+                    </div>
                 </div>
             </div>
         </div>
+        {% endfor %}
+    </tbody>
         <!--Ranking-->
         <div class="container px-4 py-1"></div>
         <div class="row">
@@ -129,11 +129,10 @@
             <div class="col d-block position-static pt-0 mx-5 justify-content-center">
                 <div class="col-md-10 justify-content-center">
             
-                    <article class="calificacion ">
+                    <div>
                         <h2 class="comentario mb-1">CALIFICACION</h2>
-      
-                        <h2 class="comentario mb-1 justify-content-center">#</h2>
-                    </article>
+                        <h3 class="centered">{{poem.promedio}}</h3>
+                    </div>
             </div>
             <!-- Espacio en blanco -->
             <div class="col-lg-2 col-md-1">

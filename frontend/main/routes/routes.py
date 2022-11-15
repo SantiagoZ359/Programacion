@@ -23,22 +23,6 @@ def index_poeta(jwt = None):
     print(user)
 
     return render_template('pag_princ_poeta.html', poems = poem_list, user = user, jwt = jwt) 
-    
-    
-    
-    #return render_template ('pag_princ_poeta.html')
-    #api_url = "http://127.0.0.1:8500/poemas"
-
-    # data = {"page":1, "por_pagina":3}
-    # jwt =requests.cookies.get("access_token")
-    # print(jwt)
-    # headers = {"Content-Type": "application/json", "Authorization": "BEARER {}".format(jwt)}
-    # response = requests.get(api_url, json = data, headers = headers)
-    # print(response.status_code)
-    # poemas = json.loads(response.text)
-    # print(poemas)
-
-    # return render_template('pag_princ_poeta.html', poemas = poemas["poemas"])
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -65,7 +49,7 @@ def login():
     else:
         return render_template("login.html")
 
-@app.route('/')
+@app.route('/user')
 def index_user():
     api_url = f'{current_app.config["API_URL"]}/poemas'
     
@@ -73,7 +57,7 @@ def index_user():
 
     print(response)
     poems = json.loads(response.text)
-    list_poems = poems["poemas"]
+    list_poems = poems["poems"]
     return render_template('pag_princ_user.html', poems=list_poems)
 
 @app.route('/editar_perfil')
@@ -87,17 +71,6 @@ def lista_poemas_usuario():
 @app.route('/lista_poema_poeta')
 def lista_poem_poeta():
     return render_template ('lista_poema_poeta.html')
-
-# @app.route('/user')
-# def index_user():
-#     api_url = f'{current_app.config["API_URL"]}/poemas'
-    
-#     response = f.get_poems(api_url)
-
-#     print(response)
-#     poems = json.loads(response.text)
-#     list_poems = poems["poemas"]
-#     return render_template('pag_princ_user.html', poems=list_poems)
 
 @app.route('/perfil')
 def details():
@@ -141,7 +114,7 @@ def create():
     else:
         return redirect(url_for('app.login'))
 
-@app.route('/ver_user/<int:id>')
+@app.route('/ver_poema/<int:id>')
 def view_user(id):
     if request.cookies.get('access_token'):
         jwt = f.get_jwt()
@@ -158,13 +131,61 @@ def view_user(id):
         marks = json.loads(resp.text)
         return render_template('ver_poema_user.html', poem=poem, marks = marks)
 
-@app.route('/ver_poema_user')
-def ver_poema_user():
-    return render_template ('ver_poema_user.html')
-
 @app.route("/logout")
 def logout():
     resp = make_response(redirect(url_for("app.login")))
     resp.delete_cookie("access_token")
     resp.delete_cookie("id")
     return resp
+
+@app.route('/mis_poemas')
+def mis_poemas():
+    jwt = f.get_jwt()
+    if jwt:
+        user = auth.load_user(jwt)
+        resp = f.get_poems_by_id(user["id"])
+        poems = json.loads(resp.text)
+        poemsList = poems["poemas"]
+        return render_template('lista_poema_poeta.html', jwt=jwt, poems = poemsList)
+    else:
+        return redirect(url_for('app.login'))
+
+# @app.route('/mis_calificaciones')
+# def mis_calif():
+#     jwt = f.get_jwt()
+#     if jwt:
+#         user = auth.load_user(jwt)
+#         user_id = str(user["id"])
+#         resp = f.get_marks_by_poet_id(str(user_id))
+#         marks = json.loads(resp.text)
+#         poem = f.get_poem(marks["poema_id"])
+#         poem = json.loads(poem.text)
+#         return render_template('a.html', jwt=jwt, marks = marks, poem = poem)
+#     else:
+#         return redirect(url_for('app.login'))
+
+@app.route('/ver_poema/<int:id>', methods=['GET', 'POST'])
+def add_mark(id):
+    jwt = f.get_jwt()
+    if jwt:
+        if request.method == 'POST':
+            score = request.form['inlineRadioOptions']
+            commentary = request.form['commentary']
+            user_id = f.get_id()
+            data = {"usuario_id": user_id, "poema_id": id, "nota": score, "comentario": commentary}
+            print(data)
+            headers = f.get_headers(without_token=False)
+            if score != "" and commentary != "":
+                response = requests.post(f'{current_app.config["API_URL"]}/calificaciones', json=data, headers=headers)
+                print(response)
+                if response.ok:
+                    return redirect(url_for('app.view_user', id=id, jwt=jwt))
+                else:
+                    return redirect(url_for('app.add_mark', id=id))
+            else:
+                return redirect(url_for('app.add_mark', id=id))
+        else:
+            #Mostrar template
+            return render_template('ver_poema_poeta.html', jwt=f.get_jwt())
+    else:
+        return redirect(url_for('app.login'))
