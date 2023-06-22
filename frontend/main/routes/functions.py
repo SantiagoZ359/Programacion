@@ -27,6 +27,9 @@ def get_poems(jwt = None, pagina=1, por_pagina=3):
         headers = get_headers(without_token = True)
     return requests.get(api_url, json = data, headers = headers)
 
+def get_poems_page():
+    return request.cookies.get("poems_page")
+
 def get_user_info(id):
     api_url = f'{current_app.config["API_URL"]}/usuario/{id}'
     headers = get_headers()

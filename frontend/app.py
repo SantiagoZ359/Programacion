@@ -1,13 +1,14 @@
+#Importar funcion que creara la app
 from main import create_app
 import os
-#form dotenv import load_dotenv
+from dotenv import load_dotenv
 
+#Llamar a la funcion y devolver la app
 app = create_app()
-app.app_context().push()
+#Hacer push sobre el contexto de la aplicacion
+#Esto permite acceder a las popiedades de la app
+# app.app_context().push()
+load_dotenv()
 
 if __name__=='__main__':
     app.run(debug=True, port = os.getenv('PORT'))
-
-#load_dotenv()
-#if __name__=='__main__':
-#    app.run(debug=True, port = os.getenv('PORT'))

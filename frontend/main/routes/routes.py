@@ -1,5 +1,4 @@
 from email import header
-from urllib import response
 from flask import Blueprint, render_template, make_response, request, current_app, url_for, redirect
 from . import functions as f
 from . import auth
@@ -49,16 +48,23 @@ def login():
     else:
         return render_template("login.html")
 
-@app.route('/user')
+@app.route('/')
 def index_user():
     api_url = f'{current_app.config["API_URL"]}/poemas'
     
     response = f.get_poems(api_url)
-
     print(response)
     poems = json.loads(response.text)
-    list_poems = poems["poems"]
+    poems = f.get_json(response)
+    poem_list = poems["poemas"]
+    # Verificar si la clave 'poems' existe en la respuesta
+    if 'poems' in poems:
+        list_poems = poems["poems"]
+    else:
+        list_poems = []
+    
     return render_template('pag_princ_user.html', poems=list_poems)
+
 
 @app.route('/editar_perfil')
 def editar_perfil():
