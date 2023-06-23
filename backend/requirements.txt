@@ -1,6 +1,6 @@
-Flask==2.1.1
+Flask
 python.dotenv
 flask-restful
-Flask_SQLAlchemy
+Flask_SQLAlchemy==3.0.5
 flask-jwt-extended
 flask-Mail
