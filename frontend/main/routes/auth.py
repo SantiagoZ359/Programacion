@@ -18,3 +18,4 @@ def load_user(token):
         print('Invalid Token')
     except jwt.exceptions.DecodeError:
         print('Decode Error')
+

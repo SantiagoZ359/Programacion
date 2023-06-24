@@ -15,13 +15,13 @@ def index_poeta(jwt = None):
         jwt =f.get_jwt()
     
     resp = f.get_poems(jwt=jwt)
-    poems = f.get_json(resp)
-    poem_list = poems["poemas"]
+    poemas = f.get_json(resp)
+    poem_list = poemas["poemas"]
     user = f.get_user(f.get_id())
     user = json.loads(user.text)
     print(user)
 
-    return render_template('pag_princ_poeta.html', poems = poem_list, user = user, jwt = jwt) 
+    return render_template('pag_princ_poeta.html', poemas = poem_list, user = user, jwt = jwt) 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -29,7 +29,6 @@ def login():
         # Obtener password y email
         email = request.form.get("email")
         password = request.form.get("contraseña")
-
         if email != None and password != None:
             response = f.login(email, password)
             
@@ -54,16 +53,16 @@ def index_user():
     
     response = f.get_poems()
     print(response)
-    poemas = json.loads(response.text)
-    poemas = f.get_json(response)
-    poem_list = poemas["poemas"]
+    poems = json.loads(response.text)
+    poems = f.get_json(response)
+    poem_list = poems["poemas"]
     # Verificar si la clave 'poems' existe en la respuesta
-    if 'poems' in poemas:
-        list_poems = poemas["poemas"]
+    if 'poems' in poems:
+        list_poems = poems["poemas"]
     else:
         list_poems = []
     
-    return render_template('pag_princ_user.html', poemas = poem_list)
+    return render_template('pag_princ_user.html', poems = poem_list)
 
 
 @app.route('/editar_perfil')

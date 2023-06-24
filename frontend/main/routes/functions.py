@@ -9,16 +9,16 @@ def get_poem(id):
     headers = get_headers()
     return requests.get(api_url, headers=headers)
 
-def get_poems_by_id(id, pagina=1, por_pagina=3):
+def get_poems_by_id(id, page=1, perpage=3):
     api_url = f'{current_app.config["API_URL"]}/poemas'
-    data = {"pagina": pagina, "por_pagina": por_pagina, "usuario_id": id}
+    data = {"page": page, "perpage": perpage, "usuario_id": id}
 
     headers = get_headers(without_token=True)
     return requests.get(api_url, json=data, headers=headers)
 
-def get_poems(jwt=None, pagina=1, por_pagina=3):
+def get_poems(jwt=None, page=1, perpage=3):
     api_url = f'{current_app.config["API_URL"]}/poemas'
-    data = {"pagina": pagina, "por_pagina": por_pagina}
+    data = {"pagina": page, "por_pagina": perpage}
 
     if jwt:
         headers = get_headers(jwt=jwt)

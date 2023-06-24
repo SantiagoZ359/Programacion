@@ -58,33 +58,7 @@ class Poemas(Resource):
         perpage = request.args.get("perpage", default=3, type=int)
 
         poemas = db.session.query(PoemaModel)
-
-        if request.get_json():
-            filters = request.get_json().items()
-            for key, value in filters:
-                if key == "title":
-                    poemas = poemas.filter(PoemaModel.titulo.like("%" + value + "%"))
-                if key == "user_id":
-                    poemas = poemas.filter(PoemaModel.usuario_id == value)
-                if key == "date_time[gte]":
-                    poemas = poemas.filter(PoemaModel.fecha >= datetime.strptime(value, "%d/%m/%Y"))
-                if key == "date_time[lte]":
-                    poemas = poemas.filter(PoemaModel.fecha <= datetime.strptime(value, "%d/%m/%Y"))
-                if key == "username":
-                    poemas = poemas.filter(PoemaModel.usuario.has(UsuarioModel.nombre.like("%" + value + "%")))
-                if key == "rating":
-                    poemas = poemas.outerjoin(PoemaModel.calificaciones).group_by(PoemaModel.id).having(func.avg(CalificacionModel.score).like(float(value)))
-                if key == "sort_by":
-                    if value == "date_time":
-                        poemas = poemas.order_by(PoemaModel.fecha)
-                    if value == "date_time[desc]":
-                        poemas = poemas.order_by(PoemaModel.fecha.desc())
-                    if value == "mark":
-                        poemas = poemas.outerjoin(PoemaModel.calificaciones).group_by(PoemaModel.id).order_by(func.count(CalificacionModel.score))
-                    if value == "mark[desc]":
-                        poemas = poemas.outerjoin(PoemaModel.calificaciones).group_by(PoemaModel.id).order_by(func.count(CalificacionModel.score).desc())
-
-        poemas_pagination = poemas.paginate(page, perpage, False)
+        poemas_pagination = poemas.paginate(page=page, per_page=perpage, error_out=False)
 
         return jsonify({
             "poemas": [poema.to_json() for poema in poemas_pagination.items],
@@ -107,8 +81,6 @@ class Poemas(Resource):
                     page = int(value)
                 if key == "perpage":
                     perpage = int(value)
-                # Resto del código...
-
         poems_pagination = poems.paginate(page, perpage, False)
 
         return jsonify({
