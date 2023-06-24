@@ -48,22 +48,22 @@ def login():
     else:
         return render_template("login.html")
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index_user():
-    api_url = f'{current_app.config["API_URL"]}/poemas'
+    #api_url = f'{current_app.config["API_URL"]}/poemas'
     
-    response = f.get_poems(api_url)
+    response = f.get_poems()
     print(response)
-    poems = json.loads(response.text)
-    poems = f.get_json(response)
-    poem_list = poems["poemas"]
+    poemas = json.loads(response.text)
+    poemas = f.get_json(response)
+    poem_list = poemas["poemas"]
     # Verificar si la clave 'poems' existe en la respuesta
-    if 'poems' in poems:
-        list_poems = poems["poems"]
+    if 'poems' in poemas:
+        list_poems = poemas["poemas"]
     else:
         list_poems = []
     
-    return render_template('pag_princ_user.html', poems=list_poems)
+    return render_template('pag_princ_user.html', poemas = poem_list)
 
 
 @app.route('/editar_perfil')
