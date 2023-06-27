@@ -1,5 +1,3 @@
-from itertools import count
-from locale import currency
 from flask_restful import Resource
 from flask import request, jsonify
 import jwt
@@ -11,7 +9,7 @@ from sqlalchemy import func
 from datetime import *
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from main.auth.decorators import admin_required
-from flask_jwt_extended import verify_jwt_in_request, get_jwt
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt, verify_jwt_in_request
 
 class Poema(Resource):
     @jwt_required(optional=True)
@@ -92,13 +90,15 @@ class Poemas(Resource):
 
     @jwt_required()
     def post(self):
+        if request.cookies.get('access_token'):
+            r = requests.get()
         poema = PoemaModel.from_json(request.get_json())
         identidad_usuario = get_jwt_identity()
         poema.usuario_id = identidad_usuario
         usuario = db.session.query(UsuarioModel).get(identidad_usuario)
         claims = get_jwt()
 
-        if len(usuario.poemas) == 0 or len(usuario.calificaciones) / len(usuario.poemas) > 5 and claims['rol'] != "admin":
+        if len(usuario.poemas) == 0 or len(usuario.calificaciones) / len(usuario.poemas) >= 0 and claims['rol'] != "admin":
             try:
                 db.session.add(poema)
                 db.session.commit()

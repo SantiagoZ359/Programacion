@@ -8,20 +8,23 @@ import json
 
 app = Blueprint('app', __name__, url_prefix= '/')
 
-@app.route('/poeta')
+@app.route('/poeta', methods=['GET', 'POST'])
 def index_poeta(jwt = None):
     
     if jwt == None:
         jwt =f.get_jwt()
+        print("error")
     
-    resp = f.get_poems(jwt=jwt)
-    poemas = f.get_json(resp)
-    poem_list = poemas["poemas"]
+    response = f.get_poems()
+    print(response)
+    poems = json.loads(response.text)
+    poems = f.get_json(response)
+    poem_list = poems["poemas"]
     user = f.get_user(f.get_id())
     user = json.loads(user.text)
     print(user)
 
-    return render_template('pag_princ_poeta.html', poemas = poem_list, user = user, jwt = jwt) 
+    return render_template('pag_princ_poeta.html', poems = poem_list, user = user, jwt = jwt) 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
