@@ -4,9 +4,13 @@ import json
 
 app = Blueprint('app', __name__, url_prefix='/')
 
-def get_poem(id):
+def get_poem(id, jwt=None):
     api_url = f'{current_app.config["API_URL"]}/poema/{id}'
-    headers = get_headers()
+    if jwt:
+        headers = get_headers(jwt)
+
+    else:
+        headers = get_headers(without_token=True)
     return requests.get(api_url, headers=headers)
 
 def get_poems_by_id(id, page=1, perpage=3):

@@ -43,10 +43,10 @@ class Poemas(Resource):
     def get(self):
         claims = get_jwt()
         
-        if not claims:
+        if (not claims):
             return self.show_poems_without_token()
 
-        if claims['rol'] in ["user", "admin"]:
+        if claims['rol'] in ["usuario", "admin"]:
             return self.show_poems_with_token(user_id=claims['id'])
         else:
             return 'Not "rol" found.', 403

@@ -133,12 +133,17 @@ def view_user(id):
         #Mostrar template
         return render_template('ver_poema_poeta.html', jwt = jwt, poem = poem, marks = marks)
     else:
+        print("hola")
         poem = f.get_poem(id)
         poem = json.loads(poem.text)
-        resp = f.get_marks_by_poem_id(id)
-        marks = json.loads(resp.text)
-        return render_template('ver_poema_user.html', poem=poem, marks = marks)
+        mark = f.get_marks_by_poem_id(id)
+        marks = json.loads(mark.text)
+        print(marks)
+        #Mostrar template
+        
+        return render_template('ver_poema_user.html', poem = poem, marks = marks)
 
+    
 @app.route("/logout")
 def logout():
     resp = make_response(redirect(url_for("app.login")))

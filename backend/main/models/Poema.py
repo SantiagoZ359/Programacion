@@ -70,7 +70,9 @@ class Poema(db.Model):
             'id': self.id,
             'titulo': self.titulo,
             'usuario':self.usuario.to_json_short(),
-            'cuerpo':str(self.cuerpo)
+            'cuerpo':str(self.cuerpo),
+            'fecha':str(self.fecha.strftime("%d-%m-%Y")),
+            'promedio': str(self.promedio_nota()),
         }
         return poema_json
 
@@ -87,5 +89,5 @@ class Poema(db.Model):
                     titulo=titulo,
                     usuario_id=usuario_id,
                     cuerpo=cuerpo,
-                    fecha=fecha
+                    fecha=fecha,
                     )
