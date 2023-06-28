@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
-    {% block content %}
-    <!--Login-->
-    <!-- <form method="POST" id="form1" action="{{url_for('app.login')}}"> -->
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
       <div class="modal-content rounded-3 shadow">
         <div class="modal-header p-5 pb-3 border-bottom-0">
-          <!-- <h5 class="modal-title">Modal title</h5> -->
           <h2 class="fw-bold mb-0">INGRESAR</h2>
         </div>
   
@@ -12,19 +13,23 @@
           <form method="POST" id="form1" action="{{url_for('app.login')}}">
             <div class="form-floating mb-3">
               <input type="email" class="form-control rounded-3" id="email" placeholder="name@example.com" name="email">
-              <label for="floatingInput">Direccion de correo electronico</label>
+              <label for="floatingInput">Dirección de correo electrónico</label>
             </div>
             <div class="form-floating mb-3">
-              <input type="password" class="form-control rounded-3" id="contraseña" placeholder="contraseña" name = "contraseña">
+              <input type="password" class="form-control rounded-3" id="contraseña" placeholder="contraseña" name="contraseña">
               <label for="password">Contraseña</label>
             </div>
             <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">Ingresar</button>
             <hr class="my-4">
-            </button>
-          <!-- </form> -->
+          </form>
         </div>
       </div>
-    </form>
+    </div>
+    <div class="col-md-6">
+      <div class="text-center">
+        <img src="{{url_for('static', filename='img/revo.jpg')}}" alt="Foto" class="img-fluid">
+      </div>
     </div>
   </div>
-    {% endblock %}
+</div>
+{% endblock %}

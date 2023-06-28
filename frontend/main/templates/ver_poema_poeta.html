@@ -4,26 +4,27 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Poemas</title>
+        <style>
+            body {
+                background-color: #f8f9fa; /* Color de fondo gris claro */
+            }
+        </style>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     </head>
     <body>
 
         <main>
  
-            <div class="container mb-5">
-                <header class="d-flex flex-wrap justify-content-center py-2 mb-4 border-bottom">
-                <a href="{{url_for('app.index_poeta')}}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-                    <span class="fs-4">Foro Poemas</span>
+            <div class="container-fluid mb-5">
+                <header class="d-flex flex-wrap justify-content-center py-2 mb-4 border-bottom bg-primary">
+                    <a href="{{url_for('app.index_poeta')}}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+                    <svg class="bi me-2" width="" height="32" ><use xlink:href="#bootstrap"></use></svg>
+                    <span class="fs-4" style="color: white;">Foro Poemas</span>
                 </a>
           
                 <ul class="nav nav-pills">
-                    
-                    <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                    <input type="search" class="form-control" placeholder="Buscar...." aria-label="Search">
-                    </form>
-                    <li class="nav-item"><a href="{{url_for('app.create')}}" class="nav-link">Subir Poema</a></li>
-                    <li class="nav-item"><a href="lista_poema_poeta" class="nav-link">Poemas</a></li>
+                    <li class="nav-item"><a href="{{url_for('app.create')}}" class="nav-link" style="color: white;">Subir Poema</a></li>
+                    <li class="nav-item"><a href="{{url_for('app.mis_poemas')}}" class="nav-link" style="color: white;">Tus Poemas</a></li>
                 </ul>
                 
 
